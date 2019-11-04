@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v18.12.3                    
 ******************************************************************************
->> Linked Mon Oct 28 19:40:28 2019
+>> Linked Mon Nov  4 11:21:32 2019
 
 OUTPUT FILE NAME:   <EGSE.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 0000047d
@@ -37,7 +37,7 @@ section   page    origin      length       input sections
 .text      0    0000026c    00000298     
                   0000026c    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
                   0000039e    00000002     --HOLE-- [fill = 0]
-                  000003a0    00000070     hello.obj (.text)
+                  000003a0    00000070     main.obj (.text)
                   00000410    00000038     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralReady)
                   00000448    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
                   0000047c    0000002c     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
@@ -63,7 +63,7 @@ MODULE SUMMARY
        ------                         ----   -------   -------
     .\
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
-       hello.obj                      112    0         0      
+       main.obj                       112    0         0      
     +--+------------------------------+------+---------+---------+
        Total:                         124    620       0      
                                                               
