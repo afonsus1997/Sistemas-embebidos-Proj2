@@ -119,7 +119,7 @@ SwitchTask(void *pvParameters)
                 //
                 // Pass the value of the button pressed to LEDTask.
                 //
-                if(xQueueSend(g_pLEDQueue, &ui8Message, portMAX_DELAY) !=
+                if(xQueueSend(g_pLEDQueue, 0x01, portMAX_DELAY) !=
                    pdPASS)
                 {
                     //

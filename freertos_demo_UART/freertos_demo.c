@@ -9,6 +9,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
 #include "utils/uartstdio.h"
+#include "driverlib/interrupt.h"
 #include "led_task.h"
 #include "uart.h"
 #include "switch_task.h"
@@ -52,20 +53,25 @@ int main(void)
 
 
 
+
+
+
     if(UartRPITaskInit() != 0)
         for(;;);
+
+    IntMasterEnable();
 
     //
     // Create the LED task.
     //
-    if(LEDTaskInit() != 0)
-        for(;;);
+    //if(LEDTaskInit() != 0)
+    //    for(;;);
 
     //
     // Create the switch task.
     //
-    if(SwitchTaskInit() != 0)
-        for(;;);
+    //if(SwitchTaskInit() != 0)
+    //    for(;;);
 
     //
     // Start the scheduler.  This should not return.
