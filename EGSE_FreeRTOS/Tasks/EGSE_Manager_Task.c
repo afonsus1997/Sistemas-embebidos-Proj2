@@ -16,7 +16,7 @@ static void vEGSEManagerTask(void *pvParameters){
 
         if(xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY) == pdPASS)
 
-            UARTprintf("\n\nRecieved message from uart queue\n");
+            UARTprintf("\n\nRecieved message from uart queue:%c\n", sUartRcv.rxBuff[0]);
 
     }
 
