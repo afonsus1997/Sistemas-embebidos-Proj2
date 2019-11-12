@@ -7,7 +7,7 @@
 //static uartmsg_t uartmsg;
 
 
-static void UartRPITask(void *pvParameters){
+static void vUartRPITask(void *pvParameters){
 
 
     while(1){
@@ -23,7 +23,8 @@ static void UartRPITask(void *pvParameters){
             }
 
             //send msg to queue
-            xQueueSendFromISR(g_pUartRPIQueue, (void *) &msg, 0);
+            xQueueSend(g_pUartRPIQueue, (void *) &msg, 0);
+            UARTprintf("\n\nSent Message to UART queue\n");
 
         }
     }
@@ -41,8 +42,8 @@ void UARTInt0Handler(void)
 
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
-    if(xHigherPriorityTaskWoken == pdTRUE)
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    //if(xHigherPriorityTaskWoken == pdTRUE)
+    //    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 }
 
@@ -98,7 +99,7 @@ uint32_t UartRPITaskInit(void)
 
     xsUARTin = xSemaphoreCreateBinary();
 
-    if(xTaskCreate(UartRPITask, (const portCHAR *)"UartRPI", UartRPITASKSTACKSIZE, NULL,
+    if(xTaskCreate(vUartRPITask, (const portCHAR *)"UartRPI", UartRPITASKSTACKSIZE, NULL,
                    tskIDLE_PRIORITY + PRIORITY_UartRPI_TASK, NULL) != pdTRUE)
     {
         return(1);

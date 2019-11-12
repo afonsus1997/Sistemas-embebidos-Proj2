@@ -11,12 +11,17 @@
 #include "utils/uartstdio.h"
 #include "driverlib/interrupt.h"
 #include "led_task.h"
-#include "uart.h"
 #include "switch_task.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+
+//#include "uart.h"
+//#include "EGSE_Manager_Task.h"
+extern uint32_t UartRPITaskInit(void);
+extern uint32_t vEGSEManagerTaskINIT(void);
+
 
 
 //https://sites.google.com/site/luiselectronicprojects/tutorials/tiva-tutorials
@@ -58,6 +63,10 @@ int main(void)
 
     if(UartRPITaskInit() != 0)
         for(;;);
+
+    //if(vEGSEManagerTaskINIT()!= 0)
+    //    for(;;);
+
 
     IntMasterEnable();
 
