@@ -19,6 +19,7 @@
 #include "semphr.h"
 
 //#include "uart.h"
+//test
 
 
 #define EGSEManagerSTACKSIZE        128         // Stack size in words
