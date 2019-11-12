@@ -50,7 +50,7 @@ void UARTInt0Handler(void)
 
 uint32_t UartRPITaskInit(void)
 {
-    //g_pUartRPIQueue = xQueueCreate(UartRPI_QUEUE_SIZE, UartRPI_ITEM_SIZE);
+    g_pUartRPIQueue = xQueueCreate(UartRPI_QUEUE_SIZE, UartRPI_ITEM_SIZE);
 
 
 

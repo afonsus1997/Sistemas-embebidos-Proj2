@@ -26,7 +26,7 @@ extern uint32_t vEGSEManagerTaskINIT(void);
 
 //https://sites.google.com/site/luiselectronicprojects/tutorials/tiva-tutorials
 
-xSemaphoreHandle g_pUARTSemaphore;
+//xSemaphoreHandle g_pUARTSemaphore;
 
 #ifdef DEBUG
 void
@@ -64,8 +64,8 @@ int main(void)
     if(UartRPITaskInit() != 0)
         for(;;);
 
-    //if(vEGSEManagerTaskINIT()!= 0)
-    //    for(;;);
+    if(vEGSEManagerTaskINIT()!= 0)
+      for(;;);
 
 
     IntMasterEnable();

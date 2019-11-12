@@ -35,7 +35,7 @@ extern xQueueHandle g_pLEDQueue;
 
 SemaphoreHandle_t xsUARTin;
 
-static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
 
 uint32_t UartRPITaskInit(void);

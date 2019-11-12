@@ -9,5 +9,6 @@
 	<rts value="libc.a"/>
 	<createSlaveProjects value=""/>
 	<origin value="C:/ti/TivaWare_C_Series-2.1.4.178/examples/boards/ek-tm4c123gxl/freertos_demo/ccs"/>
-	<isTargetManual value="true"/>
+	<isTargetManual value="false"/>
+	<connection value="common/targetdb/connections/Stellaris_ICDI_Connection.xml"/>
 </projectOptions>

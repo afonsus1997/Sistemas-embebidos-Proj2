@@ -9,11 +9,14 @@
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/uart.h"
 #include "utils/uartstdio.h"
+#include "driverlib/interrupt.h"
 #include "priorities.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "semphr.h"
 
 //#include "uart.h"
 
