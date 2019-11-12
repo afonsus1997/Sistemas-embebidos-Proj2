@@ -9,7 +9,6 @@
 
 static void UartRPITask(void *pvParameters){
 
-    xsUARTin = xSemaphoreCreateBinary();
 
     while(1){
         if( xSemaphoreTake( xsUARTin, portMAX_DELAY  ) == pdTRUE ){
@@ -42,12 +41,15 @@ void UARTInt0Handler(void)
 
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
+    if(xHigherPriorityTaskWoken == pdTRUE)
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
 }
 
 
 uint32_t UartRPITaskInit(void)
 {
-    g_pUartRPIQueue = xQueueCreate(UartRPI_QUEUE_SIZE, UartRPI_ITEM_SIZE);
+    //g_pUartRPIQueue = xQueueCreate(UartRPI_QUEUE_SIZE, UartRPI_ITEM_SIZE);
 
 
 
@@ -67,7 +69,7 @@ uint32_t UartRPITaskInit(void)
     ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
     ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
-    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 576000,
+    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 57600,
                                 (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                                  UART_CONFIG_PAR_NONE));
 
@@ -81,9 +83,9 @@ uint32_t UartRPITaskInit(void)
     //UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
 
 
-    UARTStdioConfig(0, 115200, 16000000);
+    UARTStdioConfig(0, 57600, 16000000);
     //for(;;)
-    //UARTprintf("\n\nWelcome to the EK-TM4C123GXL FreeRTOS Demo!\n");
+    UARTprintf("\n\nWelcome to the EK-TM4C123GXL FreeRTOS Demo!\n");
 
     //UARTStdioConfig(3, 115200, 16000000);
 
@@ -94,7 +96,7 @@ uint32_t UartRPITaskInit(void)
 
     UARTIntRegister(UART0_BASE, &UARTInt0Handler);
 
-
+    xsUARTin = xSemaphoreCreateBinary();
 
     if(xTaskCreate(UartRPITask, (const portCHAR *)"UartRPI", UartRPITASKSTACKSIZE, NULL,
                    tskIDLE_PRIORITY + PRIORITY_UartRPI_TASK, NULL) != pdTRUE)
