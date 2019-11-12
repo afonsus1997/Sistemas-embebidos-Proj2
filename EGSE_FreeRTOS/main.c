@@ -23,7 +23,7 @@ extern uint32_t UartRPITaskInit(void);
 extern uint32_t vEGSEManagerTaskINIT(void);
 
 
-//test
+//mac
 //https://sites.google.com/site/luiselectronicprojects/tutorials/tiva-tutorials
 
 //xSemaphoreHandle g_pUARTSemaphore;
