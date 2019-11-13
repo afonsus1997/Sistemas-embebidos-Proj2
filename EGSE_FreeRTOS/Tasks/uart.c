@@ -1,6 +1,7 @@
-
+#define USBDEBUG
 
 #include "uart.h"
+
 
 
 
@@ -89,7 +90,7 @@ uint32_t UartRPITaskInit(void)
 
 
 
-    UARTStdioConfig(0, 57600, 16000000);
+    UARTStdioConfig(DEBUG_UARTBASE, 57600, 16000000);
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 

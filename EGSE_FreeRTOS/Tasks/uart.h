@@ -21,6 +21,12 @@
 #define UartRPITASKSTACKSIZE        500         // Stack size in words
 
 
+#ifdef USBDEBUG
+    #define DEBUG_UARTBASE 0
+#endif
+#ifndef USBDEBUG
+    #define DEBUG_UARTBASE 1
+#endif
 
 #define UartRPI_ITEM_SIZE           sizeof(uartmsg_t)
 #define UartRPI_QUEUE_SIZE          5
