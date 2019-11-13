@@ -17,6 +17,8 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "../ETP/msgtypes.h"
+
 
 #define UartRPITASKSTACKSIZE        500         // Stack size in words
 

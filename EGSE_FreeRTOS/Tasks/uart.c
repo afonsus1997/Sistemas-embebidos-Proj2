@@ -7,6 +7,13 @@
 
 //static uartmsg_t uartmsg;
 
+void EGSE_sendUARTRPI(ETPUnion_t *msg){
+    uint8_t size = sizeof(msg->header) + msg->header.size;
+    void *buff = &msg->raw[0];
+    while(size--){
+        UARTCharPut(UART0_BASE, buff++);
+    }
+}
 
 static void vUartRPITask(void *pvParameters){
 

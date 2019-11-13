@@ -6,12 +6,20 @@
 
 static void handle_EPTMsg(ETPUnion_t *msg){
     ETPHeader_t *header = &msg->header;
+    ETPUnion_t *msgtemp;
+
     switch(header->opcode){
         case ETPOpcode_Sync: {
-            UARTprintf("[EGSE Manager Task] - Got sync!\n");
+            UARTprintf("[EGSE Manager Task] - Got sync request from RPI\n");
+            EGSE_ready = true;
+            EGSE_sendSync(msgtemp);
+            EGSE_sendLog(msgtemp, "Hi there!");
             break;
        }
         case ETPOpcode_DeSync: {
+            UARTprintf("[EGSE Manager Task] - Got desync request from RPI\n");
+            EGSE_ready = false;
+
             break;
        }
         case ETPOpcode_I2C0Frame: {
@@ -33,7 +41,8 @@ static void handle_EPTMsg(ETPUnion_t *msg){
        }
 
         case ETPOpcode_Ping: {
-
+            UARTprintf("[EGSE Manager Task] - Got ping from RPI\n");
+            EGSE_sendPong(msgtemp);
             break;
        }
 
@@ -84,9 +93,12 @@ static void vEGSEManagerTask(void *pvParameters){
         UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.rxBuff[0]);
         msg = (ETPUnion_t *)&sUartRcv.rxBuff;
         //HARD CODING EXAMPLE
-        msg->header.opcode = ETPOpcode_Sync;
+        //msg->header.opcode = ETPOpcode_Sync;
         //assuming message has header
         handle_EPTMsg(msg);
+
+        //msg->header.opcode = ETPOpcode_Ping;
+        //handle_EPTMsg(msg);
 
 
 
