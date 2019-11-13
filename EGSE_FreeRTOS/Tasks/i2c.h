@@ -17,14 +17,8 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-#include "msgtypes.h"
-//#include "uart.h"
-//test
 
-
-#define EGSEManagerSTACKSIZE        128         // Stack size in words
-
-extern xQueueHandle g_pUartRPIQueue;
+#define I2CEGSETaskStackSize        128         // Stack size in words
 
 typedef volatile struct {
     uint8_t rxBuff[255];
@@ -33,8 +27,18 @@ typedef volatile struct {
     size_t rxSize;
 } uartmsg_t;
 
-static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+#define I2CEGSE_ITEM_SIZE           sizeof(uint8_t)
+#define I2CEGSE_QUEUE_SIZE          5
+
+xQueueHandle g_pI2CEGSEQueue;
 
 
-static void vEGSEManagerTask(void *pvParameters);
-uint32_t vEGSEManagerTaskINIT(void);
+
+//BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+
+uint32_t vI2CEGSETaskInit(void);
+
+
+static void vI2CEGSETask(void *pvParameters);
+

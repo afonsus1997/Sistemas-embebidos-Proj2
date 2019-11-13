@@ -20,12 +20,7 @@
 
 #define UartRPITASKSTACKSIZE        128         // Stack size in words
 
-typedef volatile struct {
-    uint8_t rxBuff[255];
-    size_t rxIdxWrite;
-    size_t rxIdxRead;
-    size_t rxSize;
-} uartmsg_t;
+
 
 #define UartRPI_ITEM_SIZE           sizeof(uartmsg_t)
 #define UartRPI_QUEUE_SIZE          5
@@ -41,4 +36,17 @@ BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 uint32_t UartRPITaskInit(void);
 
 static void UartRPITask(void *pvParameters);
+
+
+/*===========  DATA TYPES ===========*/
+
+typedef volatile struct {  //uart reading type
+    uint8_t rxBuff[255];
+    size_t rxIdxWrite;
+    size_t rxIdxRead;
+    size_t rxSize;
+} uartmsg_t;
+
+
+
 
