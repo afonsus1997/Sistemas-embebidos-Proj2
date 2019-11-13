@@ -18,7 +18,7 @@
 #include "queue.h"
 #include "semphr.h"
 
-#define UartRPITASKSTACKSIZE        128         // Stack size in words
+#define UartRPITASKSTACKSIZE        500         // Stack size in words
 
 
 
@@ -30,7 +30,7 @@ extern xQueueHandle g_pLEDQueue;
 
 SemaphoreHandle_t xsUARTin;
 
-BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+BaseType_t xHigherPriorityTaskWoken = pdTRUE;
 
 
 uint32_t UartRPITaskInit(void);

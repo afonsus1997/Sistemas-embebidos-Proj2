@@ -23,8 +23,9 @@ static void vUartRPITask(void *pvParameters){
             }
 
             //send msg to queue
+            UARTprintf("[UART Task] - Sent Message to UART queue\n");
             xQueueSend(g_pUartRPIQueue, (void *) &msg, 0);
-            UARTprintf("\n\nSent Message to UART queue\n");
+
 
         }
     }
@@ -35,7 +36,6 @@ static void vUartRPITask(void *pvParameters){
 void UARTInt0Handler(void)
 {
     uint32_t ui32Status;
-
     ui32Status = ROM_UARTIntStatus(UART0_BASE, true);
 
     ROM_UARTIntClear(UART0_BASE, ui32Status);
@@ -43,7 +43,7 @@ void UARTInt0Handler(void)
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
     //if(xHigherPriorityTaskWoken == pdTRUE)
-    //    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    ///portYIELD_FROM_ISR();
 
 }
 
@@ -55,13 +55,13 @@ uint32_t UartRPITaskInit(void)
 
 
     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    //ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 
     //UARTFlowControlSet(UART0_BASE, UART_FLOWCONTROL_TX | UART_FLOWCONTROL_RX);
 
 
     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    //ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
 
     //
     // Configure GPIO Pins for UART mode.
@@ -75,18 +75,23 @@ uint32_t UartRPITaskInit(void)
                                  UART_CONFIG_PAR_NONE));
 
 
-    //ROM_GPIOPinConfigure(GPIO_PC6_U3RX);
-    //ROM_GPIOPinConfigure(GPIO_PC7_U3TX);
-    //ROM_GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+    ROM_GPIOPinConfigure(GPIO_PC6_U3RX);
+    ROM_GPIOPinConfigure(GPIO_PC7_U3TX);
+    ROM_GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+
+    ROM_UARTConfigSetExpClk(UART3_BASE, ROM_SysCtlClockGet(), 57600,
+                                    (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                                     UART_CONFIG_PAR_NONE));
 
 
     UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
-    //UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
+    UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
+
 
 
     UARTStdioConfig(0, 57600, 16000000);
     //for(;;)
-    UARTprintf("\n\nWelcome to the EK-TM4C123GXL FreeRTOS Demo!\n");
+    UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 
     //UARTStdioConfig(3, 115200, 16000000);
 

@@ -17,12 +17,12 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-#include "msgtypes.h"
+#include "../ETP/msgtypes.h"
 //#include "uart.h"
 //test
 
 
-#define EGSEManagerSTACKSIZE        128         // Stack size in words
+#define EGSEManagerSTACKSIZE        500         // Stack size in words
 
 extern xQueueHandle g_pUartRPIQueue;
 

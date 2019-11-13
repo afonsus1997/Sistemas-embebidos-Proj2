@@ -8,7 +8,7 @@ static void handle_EPTMsg(ETPUnion_t *msg){
     ETPHeader_t *header = &msg->header;
     switch(header->opcode){
         case ETPOpcode_Sync: {
-            UARTprintf("\n\nGot sync!\n");
+            UARTprintf("[EGSE Manager Task] - Got sync!\n");
             break;
        }
         case ETPOpcode_DeSync: {
@@ -78,23 +78,22 @@ static void vEGSEManagerTask(void *pvParameters){
 
     while(1){
 
+        while(xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY) != pdTRUE);
 
-        if(xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY) == pdPASS){
-            UARTprintf("\n\nRecieved message from uart queue:%c\n", sUartRcv.rxBuff[0]);
-            //msg = (ETPUnion_t *)&sUartRcv.rxBuff;
 
-            //HARD CODING EXAMPLE
-            msg->header.opcode = ETPOpcode_Sync;
-
-            //assuming message has header
-            handle_EPTMsg(msg);
-
+        UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.rxBuff[0]);
+        msg = (ETPUnion_t *)&sUartRcv.rxBuff;
+        //HARD CODING EXAMPLE
+        msg->header.opcode = ETPOpcode_Sync;
+        //assuming message has header
+        handle_EPTMsg(msg);
 
 
 
 
 
-        }
+
+
 
 
 

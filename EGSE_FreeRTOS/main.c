@@ -38,6 +38,8 @@ __error__(char *pcFilename, uint32_t ui32Line)
 void
 vApplicationStackOverflowHook(xTaskHandle *pxTask, char *pcTaskName)
 {
+    UARTprintf("[FreeRTOS] - Application Stack Overflow!\n");
+
     for(;;);
 
 }
@@ -85,6 +87,8 @@ int main(void)
     //
     // Start the scheduler.  This should not return.
     //
+    UARTprintf("[FreeRTOS] - Starting scheduler...\n");
+
     vTaskStartScheduler();
 
     //

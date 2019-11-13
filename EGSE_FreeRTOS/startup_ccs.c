@@ -280,6 +280,7 @@ FaultISR(void)
     //
     // Enter an infinite loop.
     //
+    UARTprintf("[FreeRTOS Error] - ISR Fault!\n");
     while(1)
     {
     }
