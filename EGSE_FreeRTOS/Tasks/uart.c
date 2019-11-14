@@ -87,7 +87,7 @@ uint32_t UartRPITaskInit(void)
     ROM_GPIOPinConfigure(GPIO_PC7_U3TX);
     ROM_GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
 
-    ROM_UARTConfigSetExpClk(UART3_BASE, ROM_SysCtlClockGet(), 57600,
+    ROM_UARTConfigSetExpClk(UART3_BASE, ROM_SysCtlClockGet(), 115200,
                                     (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                                      UART_CONFIG_PAR_NONE));
 
@@ -97,7 +97,7 @@ uint32_t UartRPITaskInit(void)
 
 
 
-    UARTStdioConfig(DEBUG_UARTBASE, 57600, 16000000);
+    UARTStdioConfig(3, 115200, ROM_SysCtlClockGet());
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 

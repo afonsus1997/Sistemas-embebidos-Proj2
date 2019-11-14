@@ -27,7 +27,7 @@
     #define DEBUG_UARTBASE 0
 #endif
 #ifndef USBDEBUG
-    #define DEBUG_UARTBASE 1
+    #define DEBUG_UARTBASE 3
 #endif
 
 #define UartRPI_ITEM_SIZE           sizeof(uartmsg_t)

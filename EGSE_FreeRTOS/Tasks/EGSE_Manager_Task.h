@@ -37,7 +37,8 @@ static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
 
 static void vEGSEManagerTask(void *pvParameters);
+
 uint32_t vEGSEManagerTaskINIT(void);
 
-static _Atomic bool EGSE_ready;
+extern void handle_EPTMsg(ETPUnion_t *msg);
 

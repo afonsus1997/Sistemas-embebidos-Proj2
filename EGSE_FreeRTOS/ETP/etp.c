@@ -31,3 +31,74 @@ void EGSE_sendPong(ETPUnion_t *msg) {
     EGSE_newHeader(msg, ETPOpcode_Pong, 0);
     EGSE_sendUARTRPI(msg);
 }
+
+
+void handle_EPTMsg(ETPUnion_t *msg){
+    ETPHeader_t *header = &msg->header;
+    ETPUnion_t *msgtemp;
+
+    switch(header->opcode){
+        case ETPOpcode_Sync: {
+            UARTprintf("[EGSE Manager Task] - Got sync request from RPI\n");
+            EGSE_ready = true;
+            EGSE_sendSync(msgtemp);
+            EGSE_sendLog(msgtemp, "Hi there!");
+            break;
+       }
+        case ETPOpcode_DeSync: {
+            UARTprintf("[EGSE Manager Task] - Got desync request from RPI\n");
+            EGSE_ready = false;
+
+            break;
+       }
+        case ETPOpcode_I2C0Frame: {
+
+            break;
+       }
+        case ETPOpcode_I2C0Replay: {
+
+            break;
+       }
+
+        case ETPOpcode_ETPOCMState: {
+
+            break;
+       }
+        case ETPOpcode_KeepAlive: {
+
+            break;
+       }
+
+        case ETPOpcode_Ping: {
+            UARTprintf("[EGSE Manager Task] - Got ping from RPI\n");
+            EGSE_sendPong(msgtemp);
+            break;
+       }
+
+        case ETPOpcode_Pong: {
+            break;
+       }
+
+       case ETPOpcode_SPI0Frame: {
+
+           break;
+       }
+
+       case ETPOpcode_UART0Data: {
+
+           break;
+       }
+
+       case ETPOpcode_reset: {
+
+           break;
+       }
+
+       default: {
+
+           break;
+       }
+
+    }
+
+}
