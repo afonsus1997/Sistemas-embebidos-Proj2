@@ -1,7 +1,5 @@
 #include "etp.h"
 
-
-
 void EGSE_newHeader(ETPUnion_t *msg, ETPOpcode_e opcode, size_t size) {
     msg->header =
         (ETPHeader_t){.opcode = (uint8_t)opcode, .flags = 0, .size = (uint16_t)(size)};
@@ -10,6 +8,8 @@ void EGSE_newHeader(ETPUnion_t *msg, ETPOpcode_e opcode, size_t size) {
 void EGSE_newAck(ETPUnion_t *msg) { EGSE_newHeader(msg, ETPOpcode_Ack, 0); }
 
 void EGSE_newSync(ETPUnion_t *msg) { EGSE_newHeader(msg, ETPOpcode_Sync, 0); }
+
+void EGSE_newKeepAlive(ETPUnion_t *msg) { EGSE_newHeader(msg, ETPOpcode_KeepAlive, 0); }
 
 void EGSE_sendSync(ETPUnion_t *msg) {
     EGSE_newSync(msg);
@@ -85,17 +85,21 @@ void handle_EPTMsg(ETPUnion_t *msg){
        }
 
        case ETPOpcode_UART0Data: {
-
+           UARTprintf("[EGSE Manager Task] - Sending to UART3DATA request from RPI\n");
+           EGSE_sendUART3(msg);
            break;
        }
 
        case ETPOpcode_reset: {
-
+           UARTprintf("[EGSE Manager Task] - Rebooting TIVA\n");
+           const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+           vTaskDelay(xDelay);
+           HWREG(NVIC_APINT) = NVIC_APINT_VECTKEY | NVIC_APINT_SYSRESETREQ;
            break;
        }
 
        default: {
-
+           UARTprintf("[EGSE Manager Task] - Unknown opcode\n");
            break;
        }
 

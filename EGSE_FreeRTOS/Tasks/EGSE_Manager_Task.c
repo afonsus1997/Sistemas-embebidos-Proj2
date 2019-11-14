@@ -26,13 +26,19 @@ static void vEGSEManagerTask(void *pvParameters){
         //msg->header.opcode = ETPOpcode_Sync;
         //assuming message has header
 
-        handle_EPTMsg(msg);
+        //handle_EPTMsg(msg);
 
         //msg->header.opcode = ETPOpcode_Ping;
         //handle_EPTMsg(msg);
 
+        /* uint8_t msg_UART3 = 57600;
+        msg->header.opcode = ETPOpcode_UART0Data;
+        msg->header.size = 1;
+        msg->uart0.data[0] = 123;
+        handle_EPTMsg(msg); */
 
-
+        msg->header.opcode = ETPOpcode_reset;
+        handle_EPTMsg(msg);
 
 
 

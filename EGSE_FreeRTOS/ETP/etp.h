@@ -2,6 +2,9 @@
 #include <stdint.h>
 #include <string.h>
 #include "msgtypes.h"
+#include "inc/hw_nvic.h"
+#include "inc/hw_types.h"
+#include "FreeRTOS.h"
 
 void EGSE_newHeader(ETPUnion_t *msg, ETPOpcode_e opcode, size_t size);
 

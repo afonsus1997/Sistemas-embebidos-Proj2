@@ -2,9 +2,6 @@
 
 #include "uart.h"
 
-
-
-
 //static uartmsg_t uartmsg;
 
 void EGSE_sendUARTRPI(ETPUnion_t *msg){
@@ -12,6 +9,15 @@ void EGSE_sendUARTRPI(ETPUnion_t *msg){
     void *buff = &msg->raw[0];
     while(size--){
         UARTCharPut(UART0_BASE, buff++);
+    }
+}
+
+void EGSE_sendUART3(ETPUnion_t *msg){
+    const size_t size = msg->header.size;
+    const uint8_t *data = msg->uart0.data;
+    size_t i;
+    for(i = 0 ; i < size ; i+=1){
+        UARTCharPut(UART3_BASE, data[i]);
     }
 }
 
@@ -96,8 +102,8 @@ uint32_t UartRPITaskInit(void)
     UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
 
 
-
-    UARTStdioConfig(3, 115200, ROM_SysCtlClockGet());
+    UARTStdioConfig(0, 57600, 16000000);
+    //UARTStdioConfig(0, 57600, ROM_SysCtlClockGet());
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 
