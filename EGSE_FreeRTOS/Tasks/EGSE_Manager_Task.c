@@ -1,9 +1,4 @@
-
-
 #include "EGSE_Manager_Task.h"
-
-
-
 
 static void vEGSEManagerTask(void *pvParameters){
 
@@ -52,9 +47,6 @@ static void vEGSEManagerTask(void *pvParameters){
     }
 
 }
-
-
-
 
 
 uint32_t vEGSEManagerTaskINIT(void)

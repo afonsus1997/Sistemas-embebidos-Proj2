@@ -22,7 +22,6 @@
 
 #define UartRPITASKSTACKSIZE        500         // Stack size in words
 
-
 #ifdef USBDEBUG
     #define DEBUG_UARTBASE 0
 #endif
@@ -34,12 +33,11 @@
 #define UartRPI_QUEUE_SIZE          5
 
 xQueueHandle g_pUartRPIQueue;
-extern xQueueHandle g_pLEDQueue;
+//extern xQueueHandle g_pLEDQueue;
 
 SemaphoreHandle_t xsUARTin;
 
 BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-
 
 uint32_t UartRPITaskInit(void);
 

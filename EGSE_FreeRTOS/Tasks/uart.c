@@ -22,8 +22,6 @@ void EGSE_sendUART3(ETPUnion_t *msg){
 }
 
 static void vUartRPITask(void *pvParameters){
-
-
     while(1){
         if( xSemaphoreTake( xsUARTin, portMAX_DELAY  ) == pdTRUE ){
 
@@ -39,7 +37,6 @@ static void vUartRPITask(void *pvParameters){
             //send msg to queue
             UARTprintf("[UART Task] - Sent Message to UART queue\n");
             xQueueSend(g_pUartRPIQueue, (void *) &msg, 0);
-
 
         }
     }
@@ -58,14 +55,12 @@ void UARTInt0Handler(void)
 
     //if(xHigherPriorityTaskWoken == pdTRUE)
     ///portYIELD_FROM_ISR();
-
 }
 
 
 uint32_t UartRPITaskInit(void)
 {
     g_pUartRPIQueue = xQueueCreate(UartRPI_QUEUE_SIZE, UartRPI_ITEM_SIZE);
-
 
 
     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -119,7 +114,7 @@ uint32_t UartRPITaskInit(void)
     xsUARTin = xSemaphoreCreateBinary();
 
     if(xTaskCreate(vUartRPITask, (const portCHAR *)"UartRPI", UartRPITASKSTACKSIZE, NULL,
-                   tskIDLE_PRIORITY + PRIORITY_UartRPI_TASK, NULL) != pdTRUE)
+                   tskIDLE_PRIORITY + PRIORITY_I2C_RPI_TASK , NULL) != pdTRUE)
     {
         return(1);
     }
