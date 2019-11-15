@@ -6,9 +6,9 @@
 
 void EGSE_sendUARTRPI(ETPUnion_t *msg){
     uint8_t size = sizeof(msg->header) + msg->header.size;
-    void *buff = &msg->raw[0];
+    unsigned char *buff = &msg->raw[0];
     while(size--){
-        UARTCharPut(UART0_BASE, buff++);
+        UARTCharPut(UART0_BASE, *buff++);
     }
 }
 
@@ -23,22 +23,26 @@ void EGSE_sendUART3(ETPUnion_t *msg){
 
 static void vUartRPITask(void *pvParameters){
     while(1){
-        if( xSemaphoreTake( xsUARTin, portMAX_DELAY  ) == pdTRUE ){
+        xSemaphoreTake( xsUARTin, portMAX_DELAY  );
 
             //semaphore released
-            uartmsg_t msg = {.rxIdxWrite = 0, .rxIdxWrite = 0, .rxSize = 0};// = uartmsg; //pointer to msg structure
-
+            //uartmsg_t msg = {.rxIdxWrite = 0, .rxIdxWrite = 0, .rxSize = 0};// = uartmsg; //pointer to msg structure
+            ETPUnion_t msg;
+            int16_t idx = 0;
             while (UARTCharsAvail(UART0_BASE)) {//while uart buf is not empty
-                msg.rxBuff[msg.rxIdxWrite] = UARTCharGetNonBlocking(UART0_BASE);   //put byte into msg
-                msg.rxIdxWrite == (msg.rxIdxWrite + 1) % sizeof(msg.rxBuff); //increment write index
-                msg.rxSize += 1;                                               //increment msg size
+                msg.raw[idx++] = UARTCharGetNonBlocking(UART0_BASE);   //put byte into msg
+                //msg.rxIdxWrite == (msg.rxIdxWrite + 1) % sizeof(msg.rxBuff); //increment write index
+                //msg.rxSize += 1;                                               //increment msg size
             }
 
-            //send msg to queue
-            UARTprintf("[UART Task] - Sent Message to UART queue\n");
-            xQueueSend(g_pUartRPIQueue, (void *) &msg, 0);
 
-        }
+            //msg.header.opcode = ETPOpcode_Sync;
+            //send msg to queue
+
+            UARTprintf("[UART Task] - Sent Message to UART queue\n");
+            xQueueSend(g_pUartRPIQueue, (void *) &msg, portMAX_DELAY);
+
+
     }
 
 }
@@ -53,8 +57,8 @@ void UARTInt0Handler(void)
 
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
-    //if(xHigherPriorityTaskWoken == pdTRUE)
-    ///portYIELD_FROM_ISR();
+    if(xHigherPriorityTaskWoken == pdTRUE)
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 
@@ -79,7 +83,7 @@ uint32_t UartRPITaskInit(void)
     ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
     ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
-    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 57600,
+    ROM_UARTConfigSetExpClk(UART0_BASE, 16000000, 57600,
                                 (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                                  UART_CONFIG_PAR_NONE));
 
@@ -97,7 +101,8 @@ uint32_t UartRPITaskInit(void)
     UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
 
 
-    UARTStdioConfig(0, 57600, 16000000);
+    //UARTStdioConfig(0, 57600, 16000000);
+
     //UARTStdioConfig(0, 57600, ROM_SysCtlClockGet());
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");

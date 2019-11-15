@@ -33,7 +33,7 @@ void EGSE_sendPong(ETPUnion_t *msg) {
 }
 
 
-void handle_EPTMsg(ETPUnion_t *msg){
+void handle_EPTMsg(ETPUnion_t * msg){
     ETPHeader_t *header = &msg->header;
     ETPUnion_t *msgtemp;
 

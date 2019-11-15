@@ -2,9 +2,10 @@
 
 static void vEGSEManagerTask(void *pvParameters){
 
-    uartmsg_t sUartRcv;
+    //uartmsg_t sUartRcv;
 
-    ETPUnion_t *msg ;
+    ETPUnion_t sUartRcv ;
+    ETPUnion_t * test;
 
     static size_t endOfMsg = sizeof(ETPHeader_t); //needed later to check if msg has header
     bool hasHeader;
@@ -12,13 +13,14 @@ static void vEGSEManagerTask(void *pvParameters){
 
     while(1){
 
-        while(xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY) != pdTRUE);
+        xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY);
 
+        //test = &sUartRcv;
 
-        UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.rxBuff[0]);
-        msg = (ETPUnion_t *)&sUartRcv.rxBuff;
+        UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.raw[0]);
+        //msg = (ETPUnion_t *)sUartRcv.rxBuff;
         //HARD CODING EXAMPLE
-        //msg->header.opcode = ETPOpcode_Sync;
+        //sUartRcv->header.opcode = ETPOpcode_Sync;
         //assuming message has header
 
         //handle_EPTMsg(msg);
@@ -32,8 +34,8 @@ static void vEGSEManagerTask(void *pvParameters){
         msg->uart0.data[0] = 123;
         handle_EPTMsg(msg); */
 
-        msg->header.opcode = ETPOpcode_reset;
-        handle_EPTMsg(msg);
+        //msg->header.opcode = ETPOpcode_reset;
+        handle_EPTMsg(&sUartRcv);
 
 
 
