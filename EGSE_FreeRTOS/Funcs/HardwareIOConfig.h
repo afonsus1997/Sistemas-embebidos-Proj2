@@ -104,7 +104,7 @@
 #define CS_EGSE_BASE         GPIO_PORTD_BASE //PD1
 #define MISO_EGSE_BASE       GPIO_PORTD_BASE //PD2
 #define MOSI_EGSE_BASE       GPIO_PORTD_BASE //PD3
-#define MOSI_GPIO_EX_BASE    GPIO_PORTF_BASE //PF1
+#define MOSI_GPIO_EX_BASE    GPIO_PORTF_BASE //PF1lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
 #define SCK_GPIO_EX_BASE     GPIO_PORTF_BASE //PF2
 #define BAT_CHARGE_CTRL_BASE GPIO_PORTF_BASE //PF3
