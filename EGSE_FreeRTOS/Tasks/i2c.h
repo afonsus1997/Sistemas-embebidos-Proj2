@@ -18,24 +18,18 @@
 #include "semphr.h"
 
 #define I2CEGSETaskStackSize        500         // Stack size in words
-#define I2CEGSE_ITEM_SIZE           sizeof(uint8_t)
+#define I2CEGSE_ITEM_SIZE           sizeof(uint32_t)
 #define I2CEGSE_QUEUE_SIZE          5
+#define I2C_MODULE 0
+#define TIVA_ADDR 0x08
 //#define SLAVE_ADDRESS 0x00
 
-typedef volatile struct {
-    uint8_t rxBuff[255];
-    size_t rxIdxWrite;
-    size_t rxIdxRead;
-    size_t rxSize;
-} uartmsg_t;
-
-
-xQueueHandle g_pI2CEGSEQueue;
+xQueueHandle g_pI2C_EGSEQueue;
 SemaphoreHandle_t xsI2Cin;
 
-//BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-
+void InitI2C(void);
 uint32_t vI2CEGSETaskInit(void);
+void I2CInt0Handler(void);
 static void vI2CEGSETask(void *pvParameters);
-
+void I2CsetMaster(uint8_t i2cModule);
+void I2CsetSlave(uint8_t i2cModule, uint8_t address);
