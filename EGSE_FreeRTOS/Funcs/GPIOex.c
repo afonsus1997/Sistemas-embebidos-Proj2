@@ -2,28 +2,22 @@
 
 uint8_t msg[10];
 
+void GPIOexToggleCS(uint8_t GPIOBASE, uint8_t GPIOPin, uint8_t state){
+    if(state){
+        GPIOPinWrite(GPIOBASE, GPIOPin, 1);
+    }
+    else{
+        GPIOPinWrite(GPIOBASE, GPIOPin, 1);
+        GPIOPinWrite(GPIOBASE, GPIOPin, 0);
+    }
+}
 
-void GPIOexSendmsgSPI(uint8_t exid, uint8_t * buf, uint8_t size){
-
-    uint8_t buff = &buf[0];
+void GPIOexSendmsgSPI(uint8_t exid, uint8_t * buf, uint16_t size){
+    unsigned char * buff = &buf[0];
     uint8_t ln = size;
 
-    if(exid == 1){
-        //toggle cs
-        GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
-        GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
-        while(ln--);
-            //send buff++
-        GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
-    }
-    else if (exid == 2){
-        //toggle cs
-        GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
-        GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-        while(ln--);
-            //send buff++
-        GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
-    }
+    while(ln--)
+        SSIDataPut(SSI1_BASE, *buff++);
 }
 
 
@@ -34,24 +28,24 @@ void GPIOexSendRegSPI(uint8_t exid, uint8_t addr){
     uint8_t rcv;
     msg[0] = 0b01000000;
     msg[1] = addr;
-
+    uint8_t * buff = &msg[0];
+    msg[2] = EXreg[exid][addr];
     if(exid == 1){
-        msg[2] = EX0reg[addr];
+
         //toggle cs
         GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
         GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
         while(i--);
-            //send msg
-
+            SSIDataPutNonBlocking(SSI1_BASE, buff++);
         GPIOPinWrite(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
     }
     else if (exid == 2){
-        msg[2] = EX0reg[addr];
         //toggle cs
         GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
         GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
         while(i--);
                     //send buff++
+            SSIDataPutNonBlocking(SSI1_BASE, buff++);
         GPIOPinWrite(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
     }
 }
@@ -85,67 +79,19 @@ uint8_t GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
     }
 }
 
+uint8_t GPIOexWriteAll(){
+    uint8_t msg[2] = {0b01000000, 0};
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 2);
+    GPIOexSendmsgSPI(1, (uint8_t* )&EXreg[0], EXRegSIZE);
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
 
-
-void GPIOexBegin(){
-
-    SPIinit();
-
-    EX0reg[IODIRA] = 0xFF;
-    EX0reg[IODIRB] = 0xFF;
-    EX0reg[IPOLA] = 0x00;
-    EX0reg[IPOLB] = 0x00;
-    EX0reg[GPINTENA] = 0x00;
-    EX0reg[GPINTENB] = 0x00;
-    EX0reg[DEFVALA] = 0x00;
-    EX0reg[DEFVALB] = 0x00;
-    EX0reg[INTCONA] = 0x00;
-    EX0reg[INTCONB] = 0x00;
-    EX0reg[IOCONA] = 0x18;
-    EX0reg[IOCONB] = 0x18;
-    EX0reg[GPPUA] = 0x00;
-    EX0reg[GPPUB] = 0x00;
-    EX0reg[INTFA] = 0x00;
-    EX0reg[INTFB] = 0x00;
-    EX0reg[INTCAPA] = 0x00;
-    EX0reg[INTCAPB] = 0x00;
-    EX0reg[GPIOA] = 0x00;
-    EX0reg[GPIOB] = 0x00;
-    EX0reg[OLATA] = 0x00;
-    EX0reg[OLATB] = 0x00;
-
-    EX1reg[IODIRA] = 0xFF;
-    EX1reg[IODIRB] = 0xFF;
-    EX1reg[IPOLA] = 0x00;
-    EX1reg[IPOLB] = 0x00;
-    EX1reg[GPINTENA] = 0x00;
-    EX1reg[GPINTENB] = 0x00;
-    EX1reg[DEFVALA] = 0x00;
-    EX1reg[DEFVALB] = 0x00;
-    EX1reg[INTCONA] = 0x00;
-    EX1reg[INTCONB] = 0x00;
-    EX1reg[IOCONA] = 0x18;
-    EX1reg[IOCONB] = 0x18;
-    EX1reg[GPPUA] = 0x00;
-    EX1reg[GPPUB] = 0x00;
-    EX1reg[INTFA] = 0x00;
-    EX1reg[INTFB] = 0x00;
-    EX1reg[INTCAPA] = 0x00;
-    EX1reg[INTCAPB] = 0x00;
-    EX1reg[GPIOA] = 0x00;
-    EX1reg[GPIOB] = 0x00;
-    EX1reg[OLATA] = 0x00;
-    EX1reg[OLATB] = 0x00;
-
-
-    msg[0] = 0b01000000;
-    msg[1] = IOCONA;
-    msg[2] = 0x10;
-
-    GPIOexSendmsgSPI(0, &msg, 3);
-    GPIOexSendmsgSPI(1, &msg, 3);
-
+    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
+    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 2);
+    GPIOexSendmsgSPI(2, (uint8_t* )&EXreg[1], EXRegSIZE);
+    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 }
+
 
 
 void GPIOexReadRegister(uint8_t exid, uint8_t addr){
@@ -153,10 +99,7 @@ void GPIOexReadRegister(uint8_t exid, uint8_t addr){
         return;
     }
     else{
-        if (exid == 0)
-            EX0reg[addr] = GPIOexReceiveRegSPI(exid, addr);
-        else if(exid == 1)
-            EX1reg[addr] = GPIOexReceiveRegSPI(exid, addr);
+        EXreg[exid][addr] = GPIOexReceiveRegSPI(exid, addr);
     }
 
 }
@@ -166,11 +109,151 @@ void GPIOexWriteRegister(uint8_t exid, uint8_t addr){
         return;
     }
     else{
-        if (exid == 0)
-            GPIOexReceiveRegSPI(exid, addr);
-        else if(exid == 1)
-            GPIOexReceiveRegSPI(exid, addr);
+        GPIOexReceiveRegSPI(exid, addr);
     }
 
 }
 
+
+void GPIOexPinMode(uint8_t exid, uint8_t pin, uint8_t mode){
+    if (pin >= 16) {
+        return;
+    }
+    uint8_t dirReg = IODIRA;
+    uint8_t puReg = GPPUA;
+    if (pin >= 8) {
+        pin -= 8;
+        dirReg = IODIRB;
+        puReg = GPPUB;
+    }
+
+    switch (mode) {
+        case OUTPUT:
+            EXreg[exid][dirReg] &= ~(1<<pin);
+            GPIOexWriteRegister(exid, dirReg);
+            break;
+
+        case INPUT:
+        case INPUT_PULLUP:
+            EXreg[exid][dirReg] |= (1<<pin);
+            GPIOexWriteRegister(exid, dirReg);
+            if (mode == INPUT_PULLUP) {
+                EXreg[exid][puReg] |= (1<<pin);
+            } else {
+                EXreg[exid][puReg] &= ~(1<<pin);
+            }
+            GPIOexWriteRegister(exid, puReg);
+            break;
+    }
+}
+
+
+void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value){
+    if (pin >= 16) {
+        return;
+    }
+    uint8_t dirReg = IODIRA;
+    uint8_t puReg = GPPUA;
+    uint8_t latReg = OLATA;
+    if (pin >= 8) {
+        pin -= 8;
+        dirReg = IODIRB;
+        puReg = GPPUB;
+        latReg = OLATB;
+    }
+
+    uint8_t mode = (EXreg[exid][dirReg] & (1<<pin)) == 0 ? OUTPUT : INPUT;
+
+    switch (mode) {
+        case OUTPUT:
+            if (value == 0) {
+                EXreg[exid][latReg] &= ~(1<<pin);
+            } else {
+                EXreg[exid][latReg] |= (1<<pin);
+            }
+            GPIOexWriteRegister(exid, latReg);
+            break;
+
+        case INPUT:
+            if (value == 0) {
+                EXreg[exid][puReg] &= ~(1<<pin);
+            } else {
+                EXreg[exid][puReg] |= (1<<pin);
+            }
+            GPIOexWriteRegister(exid, puReg);
+            break;
+    }
+
+
+}
+
+
+
+void GPIOexBegin(){
+
+    SPIinit();
+
+    EXreg[0][IODIRA] = 0xFF;
+    EXreg[0][IODIRB] = 0xFF;
+    EXreg[0][IPOLA] = 0x00;
+    EXreg[0][IPOLB] = 0x00;
+    EXreg[0][GPINTENA] = 0x00;
+    EXreg[0][GPINTENB] = 0x00;
+    EXreg[0][DEFVALA] = 0x00;
+    EXreg[0][DEFVALB] = 0x00;
+    EXreg[0][INTCONA] = 0x00;
+    EXreg[0][INTCONB] = 0x00;
+    EXreg[0][IOCONA] = 0x18;
+    EXreg[0][IOCONB] = 0x18;
+    EXreg[0][GPPUA] = 0x00;
+    EXreg[0][GPPUB] = 0x00;
+    EXreg[0][INTFA] = 0x00;
+    EXreg[0][INTFB] = 0x00;
+    EXreg[0][INTCAPA] = 0x00;
+    EXreg[0][INTCAPB] = 0x00;
+    EXreg[0][GPIOA] = 0x00;
+    EXreg[0][GPIOB] = 0x00;
+    EXreg[0][OLATA] = 0x00;
+    EXreg[0][OLATB] = 0x00;
+
+    EXreg[1][IODIRA] = 0xFF;
+    EXreg[1][IODIRB] = 0xFF;
+    EXreg[1][IPOLA] = 0x00;
+    EXreg[1][IPOLB] = 0x00;
+    EXreg[1][GPINTENA] = 0x00;
+    EXreg[1][GPINTENB] = 0x00;
+    EXreg[1][DEFVALA] = 0x00;
+    EXreg[1][DEFVALB] = 0x00;
+    EXreg[1][INTCONA] = 0x00;
+    EXreg[1][INTCONB] = 0x00;
+    EXreg[1][IOCONA] = 0x18;
+    EXreg[1][IOCONB] = 0x18;
+    EXreg[1][GPPUA] = 0x00;
+    EXreg[1][GPPUB] = 0x00;
+    EXreg[1][INTFA] = 0x00;
+    EXreg[1][INTFB] = 0x00;
+    EXreg[1][INTCAPA] = 0x00;
+    EXreg[1][INTCAPB] = 0x00;
+    EXreg[1][GPIOA] = 0x00;
+    EXreg[1][GPIOB] = 0x00;
+    EXreg[1][OLATA] = 0x00;
+    EXreg[1][OLATB] = 0x00;
+
+
+    msg[0] = 0b01000000;
+    msg[1] = (uint8_t)IOCONA;
+    msg[2] = 0x10;
+
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
+    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
+    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
+
+    GPIOexWriteAll();
+
+    GPIOexPinMode(1, SW_EN1, OUTPUT);
+    GPIOexGPIOWrite(1, SW_EN1, 1);
+
+}

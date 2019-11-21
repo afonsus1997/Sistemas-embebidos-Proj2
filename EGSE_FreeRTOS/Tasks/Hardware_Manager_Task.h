@@ -17,6 +17,7 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "../Funcs/GPIOex.h"
 
 
 
@@ -30,7 +31,7 @@ xQueueHandle g_HardwareTaskQueueRX;
 
 //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-uint32_t HardwareManagerTaskInit(void);
+uint32_t vHardwareManagerTaskINIT(void);
 
 static void vHardwareManagerTask(void *pvParameters);
 

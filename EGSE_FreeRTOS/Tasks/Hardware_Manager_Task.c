@@ -15,12 +15,14 @@ static void vHardwareManagerTask(void *pvParameters)
 
 
 
-uint32_t HardwareManagerTaskInit(void)
+uint32_t vHardwareManagerTaskINIT(void)
 {
     //Create Hardware Queues
     g_HardwareTaskQueueTX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
     g_HardwareTaskQueueRX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
 
+    //init GPIO expanders
+    GPIOexBegin();
 
 
     if (xTaskCreate(vHardwareManagerTask, (const portCHAR *)"HardwareManager", HardwareManagerTaskSTACKSIZE, NULL,

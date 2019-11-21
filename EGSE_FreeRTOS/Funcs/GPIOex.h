@@ -14,8 +14,10 @@
 #include "SPI.h"
 #include "GPIO.h"
 
-uint8_t EX0reg[22];   /*! Local mirrors of the 22 internal registers of the MCP23S17 chip */
-uint8_t EX1reg[22];
+#define GPIOexBASE SSI1_BASE
+#define EXRegSIZE 22
+uint8_t EXreg[EXRegSIZE][EXRegSIZE];   /*! Local mirrors of the 22 internal registers of the MCP23S17 chip */
+
 
 enum {
     IODIRA,     IODIRB,
@@ -29,6 +31,11 @@ enum {
     INTCAPA,    INTCAPB,
     GPIOA,      GPIOB,
     OLATA,      OLATB
+};
+
+enum {
+  OUTPUT, INPUT,
+  INPUT_PULLUP
 };
 
 void readRegister(uint8_t addr);
