@@ -16,7 +16,7 @@
 
 #define GPIOexBASE SSI1_BASE
 #define EXRegSIZE 22
-uint8_t EXreg[EXRegSIZE][EXRegSIZE];   /*! Local mirrors of the 22 internal registers of the MCP23S17 chip */
+uint8_t EXreg[2][EXRegSIZE];   /*! Local mirrors of the 22 internal registers of the MCP23S17 chip */
 
 
 enum {
@@ -34,7 +34,7 @@ enum {
 };
 
 enum {
-  OUTPUT, INPUT,
+  INPUT, OUTPUT,
   INPUT_PULLUP
 };
 

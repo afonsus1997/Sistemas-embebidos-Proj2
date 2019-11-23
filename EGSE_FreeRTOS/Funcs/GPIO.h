@@ -12,4 +12,4 @@
 
 #include "HardwareIOConfig.h"
 
-static int8_t vHardwareIOInit();
+void vHardwareIOInit();

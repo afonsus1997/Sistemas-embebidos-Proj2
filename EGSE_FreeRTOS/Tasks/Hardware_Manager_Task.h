@@ -17,6 +17,8 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "../Funcs/GPIO.h"
+
 #include "../Funcs/GPIOex.h"
 
 
