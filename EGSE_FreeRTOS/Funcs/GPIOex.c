@@ -244,7 +244,7 @@ void GPIOexBegin(){
 //    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 4);
 //    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
 //    GPIOexWriteAll();
@@ -254,7 +254,7 @@ void GPIOexBegin(){
     msg[2] = 0x0;
 
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
     msg[0] = 0b01000000;
@@ -262,7 +262,7 @@ void GPIOexBegin(){
     msg[2] = 0x0;
 
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
     msg[0] = 0b01000000;
@@ -270,24 +270,37 @@ void GPIOexBegin(){
     msg[2] = 0xFF;
 
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
-//    msg[0] = 0b01000000;
-//    msg[1] = (uint8_t)GPIOB;
-//    msg[2] = 0b01111111;
-//
-//    EXreg[1][GPIOB] = 0b11111111;
-//
-//    GPIOexSendRegSPI(1, GPIOB);
+    msg[0] = 0b01000000;
+    msg[1] = (uint8_t)GPIOB;
+    msg[2] = 0b11111111;
+
+    //EXreg[1][GPIOB] = 0b01111111;
+
+    //GPIOexSendRegSPI(1, GPIOB);
 
 //    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-//    GPIOexSendmsgSPI(2, (uint8_t *)&msg, 3);
+//    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
 //    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
 //    GPIOexReadRegister(1, IODIRA);
-    GPIOexPinMode(1, SW_EN2, OUTPUT);
+//    GPIOexPinMode(1, SW_EN2, OUTPUT);
+//
+    int i = 0;
+    while(1){
+        GPIOexGPIOWrite(1, SW_EN1, !i);
+        GPIOexGPIOWrite(1, SW_EN2, i);
+        GPIOexGPIOWrite(1, SW_EN3, !i);
+        GPIOexGPIOWrite(1, SW_EN4, i);
+        GPIOexGPIOWrite(1, SW_EN5, !i);
+        GPIOexGPIOWrite(1, SW_EN6, i);
+        i=!i;
+        SysCtlDelay(100000);
 
-    GPIOexGPIOWrite(1, SW_EN2, 1);
+
+
+    }
 
 }
