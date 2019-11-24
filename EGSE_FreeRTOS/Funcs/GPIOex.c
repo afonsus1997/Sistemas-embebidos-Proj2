@@ -1,5 +1,7 @@
 #include "GPIOex.h"
 
+#define psutest
+
 uint8_t msg[10];
 
 void GPIOexToggleCS(uint32_t GPIOBASE, uint32_t GPIOPin, uint32_t state){
@@ -241,66 +243,58 @@ void GPIOexBegin(){
     msg[2] = 0x8;
 
 //    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
-//    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 4);
+//    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
 //    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
     GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
-//    GPIOexWriteAll();
 
-    msg[0] = 0b01000000;
-    msg[1] = (uint8_t)IODIRA;
-    msg[2] = 0x0;
 
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
+    //define psu as outputs
+    GPIOexPinMode(SW_EN1_EXID, SW_EN1, OUTPUT);
+    GPIOexPinMode(SW_EN2_EXID, SW_EN2, OUTPUT);
+    GPIOexPinMode(SW_EN3_EXID, SW_EN3, OUTPUT);
+    GPIOexPinMode(SW_EN4_EXID, SW_EN4, OUTPUT);
+    GPIOexPinMode(SW_EN5_EXID, SW_EN5, OUTPUT);
+    GPIOexPinMode(SW_EN6_EXID, SW_EN6, OUTPUT);
+    //set default psu output as 0
+    GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, 0);
+    GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, 0);
+    GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, 0);
+    GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, 0);
+    GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, 0);
+    GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, 0);
 
-    msg[0] = 0b01000000;
-    msg[1] = (uint8_t)IODIRB;
-    msg[2] = 0x0;
+    //define front panel exp as outputs
+    GPIOexPinMode(FP_EXP1_EXID, FP_EXP1, OUTPUT);
+    GPIOexPinMode(FP_EXP2_EXID, FP_EXP2, OUTPUT);
+    GPIOexPinMode(FP_EXP3_EXID, FP_EXP3, OUTPUT);
+    GPIOexPinMode(FP_EXP4_EXID, FP_EXP4, OUTPUT);
+    GPIOexPinMode(FP_EXP5_EXID, FP_EXP5, OUTPUT);
+    //set default front panel exp output as 0
+    GPIOexGPIOWrite(FP_EXP1_EXID, SW_EN1, 0);
+    GPIOexGPIOWrite(FP_EXP2_EXID, SW_EN2, 0);
+    GPIOexGPIOWrite(FP_EXP3_EXID, SW_EN3, 0);
+    GPIOexGPIOWrite(FP_EXP4_EXID, SW_EN4, 0);
+    GPIOexGPIOWrite(FP_EXP5_EXID, SW_EN5, 0);
 
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 
-    msg[0] = 0b01000000;
-    msg[1] = (uint8_t)GPIOA;
-    msg[2] = 0xFF;
 
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
-    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
-
-    msg[0] = 0b01000000;
-    msg[1] = (uint8_t)GPIOB;
-    msg[2] = 0b11111111;
-
-    //EXreg[1][GPIOB] = 0b01111111;
-
-    //GPIOexSendRegSPI(1, GPIOB);
-
-//    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 0);
-//    GPIOexSendmsgSPI(1, (uint8_t *)&msg, 3);
-//    GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
-
-//    GPIOexReadRegister(1, IODIRA);
-//    GPIOexPinMode(1, SW_EN2, OUTPUT);
-//
+#ifdef psutest
     int i = 0;
     while(1){
-        GPIOexGPIOWrite(1, SW_EN1, !i);
-        GPIOexGPIOWrite(1, SW_EN2, i);
-        GPIOexGPIOWrite(1, SW_EN3, !i);
-        GPIOexGPIOWrite(1, SW_EN4, i);
-        GPIOexGPIOWrite(1, SW_EN5, !i);
-        GPIOexGPIOWrite(1, SW_EN6, i);
+        GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, !i);
+        GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, i);
+        GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, !i);
+//        GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, i);
+//        GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, !i);
+//        GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, i);
         i=!i;
-        SysCtlDelay(100000);
-
-
+        SysCtlDelay(1000000);
 
     }
+#endif
+
 
 }

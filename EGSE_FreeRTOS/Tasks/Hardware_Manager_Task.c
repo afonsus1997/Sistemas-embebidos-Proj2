@@ -27,11 +27,12 @@ uint32_t vHardwareManagerTaskINIT(void)
     SPIinit();
 
     //initialize tiva gpios
-        vHardwareIOInit();
+    vHardwareIOInit();
 
 
     //init GPIO expanders
     GPIOexBegin();
+
 
 
     if (xTaskCreate(vHardwareManagerTask, (const portCHAR *)"HardwareManager", HardwareManagerTaskSTACKSIZE, NULL,

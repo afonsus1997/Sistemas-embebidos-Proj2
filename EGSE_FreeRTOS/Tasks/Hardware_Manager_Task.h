@@ -18,14 +18,14 @@
 #include "queue.h"
 #include "semphr.h"
 #include "../Funcs/GPIO.h"
-
 #include "../Funcs/GPIOex.h"
+#include "../HWOps/HWmsgtypes.h"
 
 
 
 #define HardwareManagerTaskSTACKSIZE        1000         // Stack size in words
 
-#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(uint8_t)
+#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(HWUnion_t)
 #define HARDWARE_QUEUE_QUEUE_SIZE          5
 
 xQueueHandle g_HardwareTaskQueueTX;
