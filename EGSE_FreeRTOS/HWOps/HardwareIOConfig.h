@@ -5,8 +5,8 @@
  *      Author: Afonso Muralha
  */
 
-//#ifndef TASKS_HARDWAREIOCONFIG_H_
-//#define TASKS_HARDWAREIOCONFIG_H_
+#ifndef TASKS_HARDWAREIOCONFIG_H_
+#define TASKS_HARDWAREIOCONFIG_H_
 
 #include "driverlib/gpio.h"
 #include "inc/hw_memmap.h"
@@ -181,4 +181,4 @@
 
 
 
-//#endif /* TASKS_HARDWAREIOCONFIG_H_ */
+#endif /* TASKS_HARDWAREIOCONFIG_H_ */

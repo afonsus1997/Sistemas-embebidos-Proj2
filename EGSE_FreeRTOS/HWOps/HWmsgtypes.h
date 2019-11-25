@@ -1,15 +1,21 @@
+#ifndef HWMSGTYPES_H_
+#define HWMSGTYPES_H_
+
 typedef struct __attribute__((packed)) {
     uint8_t opcode;
     uint8_t flags;
     uint16_t size;
+
 } HWHeader_t;
 
 typedef struct __attribute__((packed)) {
+    HWHeader_t header;
     uint8_t PSUall[6];
     uint8_t PSUsingle[2];
 } HWPSUCmd_t;
 
 typedef struct __attribute__((packed)) {
+    HWHeader_t header;
     uint8_t ADCall[39];
     uint8_t ADCsingle[2];
 } HWADCCmd_t;
@@ -64,3 +70,4 @@ typedef enum {
     BAT_V, BAT_I
 } ADCVals_e;
 
+#endif
