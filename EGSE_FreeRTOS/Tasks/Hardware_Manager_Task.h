@@ -1,3 +1,7 @@
+#ifndef HARDWARE_MANAGER_TASK_H_
+#define HARDWARE_MANAGER_TASK_H_
+
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -18,8 +22,9 @@
 #include "queue.h"
 #include "semphr.h"
 #include "../Funcs/GPIO.h"
-#include "../Funcs/GPIOex.h"
+#include "../HWOps/GPIOex.h"
 #include "../HWOps/HWmsgtypes.h"
+#include "../HWOps/PSUcmds.h"
 
 
 
@@ -37,3 +42,4 @@ uint32_t vHardwareManagerTaskINIT(void);
 
 static void vHardwareManagerTask(void *pvParameters);
 
+#endif

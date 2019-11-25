@@ -1,3 +1,7 @@
+#ifndef GPIOEX_H_
+#define GPIOEX_H_
+
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -11,8 +15,8 @@
 #include "driverlib/sysctl.h"
 
 #include "HardwareIOConfig.h"
-#include "SPI.h"
-#include "GPIO.h"
+#include "../Funcs/SPI.h"
+#include "../funcs/GPIO.h"
 
 #define GPIOexBASE SSI1_BASE
 #define EXRegSIZE 22
@@ -59,3 +63,5 @@ uint16_t getInterruptPins();
 uint16_t getInterruptValue();
 void setInterruptLevel(uint8_t level);
 //void setInterruptOD(boolean openDrain);
+
+#endif
