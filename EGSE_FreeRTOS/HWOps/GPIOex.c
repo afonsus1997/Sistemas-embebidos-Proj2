@@ -1,6 +1,6 @@
 #include "GPIOex.h"
 
-#define psutest
+//#define psutest
 
 uint8_t msg[10];
 
@@ -287,9 +287,9 @@ void GPIOexBegin(){
         GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, !i);
         GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, i);
         GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, !i);
-//        GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, i);
-//        GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, !i);
-//        GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, i);
+        GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, i);
+        GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, !i);
+        GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, i);
         i=!i;
         SysCtlDelay(1000000);
 

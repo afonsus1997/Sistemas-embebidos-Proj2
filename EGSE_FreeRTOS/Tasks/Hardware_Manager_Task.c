@@ -22,9 +22,12 @@ void handleHWMsg(HWUnion_t * msg){
 
 static void vHardwareManagerTask(void *pvParameters)
 {
+    hwMSG.PSU.PSUsingle[PSUNum] = 3;
+    hwMSG.PSU.PSUsingle[PSUState] = 1;
+    hwMSG.PSU.header.opcode = HWOpcode_PSUSingle;
     while (1)
     {
-        xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);
+        //xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);
         handleHWMsg(&hwMSG);
     }
 
@@ -41,11 +44,11 @@ uint32_t vHardwareManagerTaskINIT(void)
 
 
 
+    //initialize tiva gpios
+    vHardwareIOInit();
 
     SPIinit();
 
-    //initialize tiva gpios
-    vHardwareIOInit();
 
 
     //init GPIO expanders

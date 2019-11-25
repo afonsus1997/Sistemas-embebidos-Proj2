@@ -29,13 +29,13 @@ void SPIinit(){
     GPIOPinTypeSSI(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_0 | GPIO_PIN_1);
     GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_4 | GPIO_PIN_6 | GPIO_PIN_7);
 
-    SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
+    SSIConfigSetExpClk(SSI0_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 1000000, 8);
 
-    SSIConfigSetExpClk(SSI1_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
-                           SSI_MODE_MASTER, 1000000, 8);
+    SSIConfigSetExpClk(SSI1_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
+                           SSI_MODE_MASTER, 500000, 8);
 
-    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
+    SSIConfigSetExpClk(SSI2_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 1000000, 8);
 
     SSIEnable(SSI0_BASE);
