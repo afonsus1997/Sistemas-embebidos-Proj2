@@ -1,13 +1,13 @@
 #include "i2c.h"
 
-static const unsigned long g_uli2cMasterBase[4] =
+static const unsigned long g_uli2cMasterBase[2] =
 {
-    I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE
+    I2C1_BASE, I2C2_BASE
 };
 
-static const unsigned long g_uli2cSlaveBase[4] =
+static const unsigned long g_uli2cSlaveBase[2] =
 {
-    I2C0_BASE, I2C1_BASE, I2C2_BASE, I2C3_BASE
+    I2C1_BASE, I2C2_BASE
 };
 
 //*****************************************************************************
@@ -15,9 +15,9 @@ static const unsigned long g_uli2cSlaveBase[4] =
 // The list of possible interrupts for the console i2c.
 //
 //*****************************************************************************
-static const unsigned long g_uli2cInt[4] =
+static const unsigned long g_uli2cInt[2] =
 {
-    INT_I2C0, INT_I2C1, INT_I2C2, INT_I2C3
+    INT_I2C1, INT_I2C2
 };
 
 //*****************************************************************************
@@ -25,10 +25,9 @@ static const unsigned long g_uli2cInt[4] =
 // The list of i2c peripherals.
 //
 //*****************************************************************************
-static const unsigned long g_uli2cPeriph[4] =
+static const unsigned long g_uli2cPeriph[2] =
 {
-    SYSCTL_PERIPH_I2C0, SYSCTL_PERIPH_I2C1,
-    SYSCTL_PERIPH_I2C2, SYSCTL_PERIPH_I2C3
+    SYSCTL_PERIPH_I2C0, SYSCTL_PERIPH_I2C2
 };
 
 //*****************************************************************************
@@ -36,12 +35,10 @@ static const unsigned long g_uli2cPeriph[4] =
 // The list of i2c gpio configurations (GPIO Port/Pin+Function assignments).
 //
 //*****************************************************************************
-static const unsigned long g_uli2cConfig[4][2] =
+static const unsigned long g_uli2cConfig[2][2] =
 {
-    {GPIO_PB2_I2C0SCL, GPIO_PB3_I2C0SDA},
     {GPIO_PA6_I2C1SCL, GPIO_PA7_I2C1SDA},
-    {GPIO_PE4_I2C2SCL, GPIO_PE5_I2C2SDA},
-    {GPIO_PD0_I2C3SCL, GPIO_PD1_I2C3SDA}
+    {GPIO_PE4_I2C2SCL, GPIO_PE5_I2C2SDA}
 };
 
 //*****************************************************************************
@@ -49,9 +46,9 @@ static const unsigned long g_uli2cConfig[4][2] =
 // The list of i2c gpio configurations (GPIO Base registers).
 //
 //*****************************************************************************
-static const unsigned long g_uli2cBase[4] =
+static const unsigned long g_uli2cBase[2] =
 {
-    GPIO_PORTB_BASE, GPIO_PORTA_BASE, GPIO_PORTE_BASE, GPIO_PORTD_BASE
+    GPIO_PORTA_BASE, GPIO_PORTE_BASE
 };
 
 //*****************************************************************************
@@ -59,13 +56,13 @@ static const unsigned long g_uli2cBase[4] =
 // The list of i2c gpio configurations (SDA, SCL pins).
 //
 //*****************************************************************************
-static const unsigned long g_uli2cSDAPins[4] =
+static const unsigned long g_uli2cSDAPins[2] =
 {
-    GPIO_PIN_3, GPIO_PIN_7, GPIO_PIN_5, GPIO_PIN_1
+    GPIO_PIN_7, GPIO_PIN_5
 };
-static const unsigned long g_uli2cSCLPins[4] =
+static const unsigned long g_uli2cSCLPins[2] =
 {
-    GPIO_PIN_2, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_0
+    GPIO_PIN_6, GPIO_PIN_4
 };
 
 static void vI2CEGSETask(void *pvParameters){
@@ -92,13 +89,115 @@ void I2CInt0Handler(void){
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
+size_t I2CWriteArray(uint8_t i2cModule, const uint8_t *data, size_t size){
+  for(size_t i = 0; i < size; i += 1) {
+      bool is_written = I2CWrite(i2cModule, data[i]) == 1;
+  }
+  size_t available = I2Cready2send(i2cModule);
+  return size;
+}
+
+void I2CbeginTransmission(uint8_t i2cModule, uint8_t address){
+  transmitting[i2cModule] = 1;
+  // set address of targeted slave
+  txAddress[i2cModule] = address;
+  txReadIndex[i2cModule] = 0;
+  txWriteIndex[i2cModule] = 0;
+}
+
+uint8_t I2CendTransmission(uint8_t i2cModule, uint8_t sendStop){
+  uint8_t error = I2C_MASTER_ERR_NONE;
+
+  uint32_t start = millis();
+  uint32_t timeout = 45;
+
+  if(TX_BUFFER_EMPTY) return 0;
+  //Wait for any previous transaction to complete
+  while(I2CMasterBusBusy(MASTER_BASE) && (!time_is_after(start,timeout, millis())));
+  while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis())));
+
+  // TODO proper
+  if(time_is_after(start, timeout, millis()))
+      return 1;
+
+
+  start = millis();
+
+  //Select which slave we are requesting data from
+  //false indicates we are writing to the slave
+  I2CMasterSlaveAddrSet(MASTER_BASE, txAddress[i2cModule], false);
+
+  while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis())));
+
+  // TODO proper
+  if(time_is_after(start, timeout, millis()))
+    return 1;
+
+  unsigned long cmd = RUN_BIT | START_BIT;
+  error = sendTxData(i2cModule,cmd,txBuffer[i2cModule][txReadIndex[i2cModule]]);
+  txReadIndex[i2cModule] = (txReadIndex[i2cModule] + 1) % BUFFER_LENGTH;
+  if(error) return error;
+  while(!TX_BUFFER_EMPTY){
+      error = sendTxData(i2cModule, RUN_BIT,txBuffer[i2cModule][txReadIndex[i2cModule]]);
+      txReadIndex[i2cModule] = (txReadIndex[i2cModule] + 1) % BUFFER_LENGTH;
+      if(error){
+        return getError(error);
+      }
+  }
+
+  if(sendStop) {
+      // WORKAROUND wait for clock line to go up
+      for (volatile int i=0; i<1; i+=1);
+      /* while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis()))); */
+      while(I2CMasterBusy(MASTER_BASE));
+
+      HWREG(MASTER_BASE + I2C_O_MCS) = STOP_BIT;
+
+      // WORKAROUND stop condition to actually be performed
+      // waits for data line to go up
+      for (volatile int i=0; i<60; i+=1); // 25 cycles isen't enough
+      /* while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis()))); */
+      while(I2CMasterBusy(MASTER_BASE));
+
+      currentState[i2cModule] = IDLE;
+  }
+  else {
+      currentState[i2cModule] = MASTER_TX;
+  }
+
+  assert(TX_BUFFER_EMPTY);
+
+  // indicate that we are done transmitting
+  transmitting[i2cModule] = 0;
+  return error;
+}
+
+void i2c_sendTo(u8 addr, const u8 *data, size_t size){
+    int tries = 0;
+    while(true){
+        I2CsetMaster(I2C_MODULE);
+        I2CbeginTransmission(I2C_MODULE, addr);
+        I2CWriteArray(I2C_MODULE, data, size);
+        int err = I2CendTransmission(I2C_MODULE, true);
+
+        if (err == 0)
+            break;
+
+        if (tries > 3) {
+             forceStop(I2C_MODULE);
+             break;
+         }
+
+    }
+    I2CsetSlave(I2C_MODULE, TIVA_ADDR);
+}
+
 //Initialize as a master
 void I2CsetMaster(uint8_t i2cModule){
     unsigned long CPU_freq;
     CPU_freq = SysCtlClockGet();
+
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     SysCtlPeripheralEnable(g_uli2cPeriph[i2cModule]);
 
@@ -107,18 +206,15 @@ void I2CsetMaster(uint8_t i2cModule){
     GPIOPinConfigure(g_uli2cConfig[i2cModule][1]);
     GPIOPinTypeI2C(g_uli2cBase[i2cModule], g_uli2cSDAPins[i2cModule]);
     GPIOPinTypeI2CSCL(g_uli2cBase[i2cModule], g_uli2cSCLPins[i2cModule]);
-    I2CMasterInitExpClk(g_uli2cMasterBase[i2cModule], CPU_freq, false);//max bus speed=400kHz for gyroscope
-
-    //I2CResetHWStateMachine(i2cModule);
+    I2CMasterInitExpClk(g_uli2cMasterBase[i2cModule], CPU_freq, false);
 }
 
 //Initialize as a slave
 void I2CsetSlave(uint8_t i2cModule, uint8_t address){
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+
     SysCtlPeripheralEnable(g_uli2cPeriph[i2cModule]);
     GPIOPinConfigure(g_uli2cConfig[i2cModule][0]);
     GPIOPinConfigure(g_uli2cConfig[i2cModule][1]);
@@ -139,53 +235,32 @@ void InitI2C(void){
     unsigned long CPU_freq;
     CPU_freq = SysCtlClockGet();
 
-    //enable I2C module 0
+    //enable I2C modules 1 and 2
     SysCtlPeripheralEnable(g_uli2cPeriph[0]);
     SysCtlPeripheralEnable(g_uli2cPeriph[1]);
-    SysCtlPeripheralEnable(g_uli2cPeriph[2]);
-    SysCtlPeripheralEnable(g_uli2cPeriph[3]);
 
-    //reset module
+    //reset modules 1 and 2
     SysCtlPeripheralReset(g_uli2cPeriph[0]);
     SysCtlPeripheralReset(g_uli2cPeriph[1]);
-    SysCtlPeripheralReset(g_uli2cPeriph[2]);
-    SysCtlPeripheralReset(g_uli2cPeriph[3]);
 
-    //enable GPIO peripheral that contains I2C 0
+    //enable GPIO peripheral that contains I2C1 and I2C2
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
 
-    // Configure the pin muxing for I2C0 functions on port B2 and B3.
+    // Configure the pin muxing for I2C1(A6,A7) and I2C2(E4,E5)
     GPIOPinConfigure(g_uli2cConfig[0][0]);
     GPIOPinConfigure(g_uli2cConfig[0][1]);
     GPIOPinConfigure(g_uli2cConfig[1][0]);
     GPIOPinConfigure(g_uli2cConfig[1][1]);
-    GPIOPinConfigure(g_uli2cConfig[2][0]);
-    GPIOPinConfigure(g_uli2cConfig[2][1]);
-    GPIOPinConfigure(g_uli2cConfig[3][0]);
-    GPIOPinConfigure(g_uli2cConfig[3][1]);
-
 
     // Select the I2C function for these pins.
     GPIOPinTypeI2C(g_uli2cBase[0], g_uli2cSDAPins[0]);
     GPIOPinTypeI2CSCL(g_uli2cBase[0], g_uli2cSCLPins[0]);
     GPIOPinTypeI2C(g_uli2cBase[1], g_uli2cSDAPins[1]);
     GPIOPinTypeI2CSCL(g_uli2cBase[1], g_uli2cSCLPins[1]);
-    GPIOPinTypeI2C(g_uli2cBase[2], g_uli2cSDAPins[2]);
-    GPIOPinTypeI2CSCL(g_uli2cBase[2], g_uli2cSCLPins[2]);
-    GPIOPinTypeI2C(g_uli2cBase[3], g_uli2cSDAPins[3]);
-    GPIOPinTypeI2CSCL(g_uli2cBase[3], g_uli2cSCLPins[3]);
 
-    // Enable and initialize the I2C0 master module.  Use the system clock for
-    // the I2C0 module.  The last parameter sets the I2C data transfer rate.
-    // If false the data rate is set to 100kbps and if true the data rate will
-    // be set to 400kbps.
     I2CMasterInitExpClk(g_uli2cMasterBase[0], CPU_freq, false);
     I2CMasterInitExpClk(g_uli2cMasterBase[1], CPU_freq, false);
-    I2CMasterInitExpClk(g_uli2cMasterBase[2], CPU_freq, false);
-    I2CMasterInitExpClk(g_uli2cMasterBase[3], CPU_freq, false);
 
     //I2CMasterIntEnable(g_uli2cMasterBase[0]);
     //I2CIntRegister(g_uli2cMasterBase[0],&I2CInt0Handler);
