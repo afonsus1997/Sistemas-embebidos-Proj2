@@ -71,20 +71,46 @@ void ADCreadFIFO(){
 
     /* Write to conversion register to indicate to request data */
     //ADCwriteRegister(0, CONVERSION);
-    SysCtlDelay(200 * (16000000 /3 /1000000));
-    /* Toogle Chip Select to start the conversion */
-    ADCToggleCS(CS_ADC1_BASE,CS_ADC1, 0);
 
-    /* */
-    uint16_t buffadc;
+    SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000));
+    /* Toogle Chip Select to start the conversion */
+    ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0);
+
+    uint32_t buffmsb;
+    uint8_t bufflsb;
     uint8_t i;
     for(i=0;i<AMM_CHANNEL;i++){
-        SSIDataGet(SSI2_BASE, &buffadc);
-        buffadc = buffadc << 8;
-        SSIDataGet(SSI2_BASE, &buffadc);
-        ADCFIFO[0][i] = buffadc;
+//        ADCwriteRegister(0, CONVERSION);
+
+        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+                                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+                                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+                                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+
+        SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000));
+
+        SSIDataGet(SSI2_BASE, &buffmsb);
+
+//        ADCwriteRegister(0, CONVERSION);
+
+        //while(SSIBusy(SSI2_BASE));
+
+        //SSIDataGet(SSI2_BASE, &bufflsb);
+        //bufflsb = bufflsb | buffmsb << 8;
+        ADCFIFO[0][i] = buffmsb<<8 | bufflsb;
     }
-    ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
+    //ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
 
     //================================================//
 
