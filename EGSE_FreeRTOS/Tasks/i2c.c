@@ -89,13 +89,6 @@ void I2CInt0Handler(void){
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-size_t I2CWriteArray(uint8_t i2cModule, const uint8_t *data, size_t size){
-  for(size_t i = 0; i < size; i += 1) {
-      bool is_written = I2CWrite(i2cModule, data[i]) == 1;
-  }
-  size_t available = I2Cready2send(i2cModule);
-  return size;
-}
 
 void I2CbeginTransmission(uint8_t i2cModule, uint8_t address){
   transmitting[i2cModule] = 1;
@@ -105,92 +98,6 @@ void I2CbeginTransmission(uint8_t i2cModule, uint8_t address){
   txWriteIndex[i2cModule] = 0;
 }
 
-uint8_t I2CendTransmission(uint8_t i2cModule, uint8_t sendStop){
-  uint8_t error = I2C_MASTER_ERR_NONE;
-
-  uint32_t start = millis();
-  uint32_t timeout = 45;
-
-  if(TX_BUFFER_EMPTY) return 0;
-  //Wait for any previous transaction to complete
-  while(I2CMasterBusBusy(MASTER_BASE) && (!time_is_after(start,timeout, millis())));
-  while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis())));
-
-  // TODO proper
-  if(time_is_after(start, timeout, millis()))
-      return 1;
-
-
-  start = millis();
-
-  //Select which slave we are requesting data from
-  //false indicates we are writing to the slave
-  I2CMasterSlaveAddrSet(MASTER_BASE, txAddress[i2cModule], false);
-
-  while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis())));
-
-  // TODO proper
-  if(time_is_after(start, timeout, millis()))
-    return 1;
-
-  unsigned long cmd = RUN_BIT | START_BIT;
-  error = sendTxData(i2cModule,cmd,txBuffer[i2cModule][txReadIndex[i2cModule]]);
-  txReadIndex[i2cModule] = (txReadIndex[i2cModule] + 1) % BUFFER_LENGTH;
-  if(error) return error;
-  while(!TX_BUFFER_EMPTY){
-      error = sendTxData(i2cModule, RUN_BIT,txBuffer[i2cModule][txReadIndex[i2cModule]]);
-      txReadIndex[i2cModule] = (txReadIndex[i2cModule] + 1) % BUFFER_LENGTH;
-      if(error){
-        return getError(error);
-      }
-  }
-
-  if(sendStop) {
-      // WORKAROUND wait for clock line to go up
-      for (volatile int i=0; i<1; i+=1);
-      /* while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis()))); */
-      while(I2CMasterBusy(MASTER_BASE));
-
-      HWREG(MASTER_BASE + I2C_O_MCS) = STOP_BIT;
-
-      // WORKAROUND stop condition to actually be performed
-      // waits for data line to go up
-      for (volatile int i=0; i<60; i+=1); // 25 cycles isen't enough
-      /* while(I2CMasterBusy(MASTER_BASE) && (!time_is_after(start, timeout, millis()))); */
-      while(I2CMasterBusy(MASTER_BASE));
-
-      currentState[i2cModule] = IDLE;
-  }
-  else {
-      currentState[i2cModule] = MASTER_TX;
-  }
-
-  assert(TX_BUFFER_EMPTY);
-
-  // indicate that we are done transmitting
-  transmitting[i2cModule] = 0;
-  return error;
-}
-
-void i2c_sendTo(u8 addr, const u8 *data, size_t size){
-    int tries = 0;
-    while(true){
-        I2CsetMaster(I2C_MODULE);
-        I2CbeginTransmission(I2C_MODULE, addr);
-        I2CWriteArray(I2C_MODULE, data, size);
-        int err = I2CendTransmission(I2C_MODULE, true);
-
-        if (err == 0)
-            break;
-
-        if (tries > 3) {
-             forceStop(I2C_MODULE);
-             break;
-         }
-
-    }
-    I2CsetSlave(I2C_MODULE, TIVA_ADDR);
-}
 
 //Initialize as a master
 void I2CsetMaster(uint8_t i2cModule){
@@ -271,8 +178,8 @@ void InitI2C(void){
 
 uint32_t vI2CEGSETaskInit(void){
 
-    InitI2C();
-    I2CsetSlave(I2C_MODULE,TIVA_ADDR);
+    //InitI2C();
+    //I2CsetSlave(I2C_MODULE,TIVA_ADDR);
 
     xsI2Cin = xSemaphoreCreateBinary();
 

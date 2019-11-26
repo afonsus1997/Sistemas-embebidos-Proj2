@@ -110,7 +110,7 @@
 //============TIVA================
 
 #define BAT_CHARGE_EN   GPIO_PIN_5 //PB5
-#define CS_DAC2         GPIO_PIN_0 //PB0
+#define CS_ADC2         GPIO_PIN_0 //PB0
 #define CS1_GPIO_EX     GPIO_PIN_1 //PB1
 #define I2C1_CLK        GPIO_PIN_4 //PE4
 #define I2C1_DATA       GPIO_PIN_5 //PE5
@@ -135,7 +135,7 @@
 #define BAT_GND_EN      GPIO_PIN_7 //PD7
 
 #define ADC_TRIGGER_TIVA GPIO_PIN_2 //PB2
-#define CS_DAC1         GPIO_PIN_0 //PE0
+#define CS_ADC1         GPIO_PIN_0 //PE0
 #define MISO_GPIO_EX    GPIO_PIN_0 //PF0
 #define MOSI_ADC        GPIO_PIN_7 //PB7
 #define MISO_ADC        GPIO_PIN_6 //PB6
@@ -146,7 +146,7 @@
 //=============TIVA_BASES==========
 
 #define BAT_CHARGE_EN_BASE   GPIO_PORTB_BASE //PB5
-#define CS_DAC2_BASE         GPIO_PORTB_BASE //PB0
+#define CS_ADC2_BASE         GPIO_PORTB_BASE //PB0
 #define CS1_GPIO_EX_BASE     GPIO_PORTB_BASE //PB1
 #define I2C1_CLK_BASE        GPIO_PORTE_BASE //PE4
 #define I2C1_DATA_BASE       GPIO_PORTE_BASE //PE5
@@ -171,14 +171,50 @@
 #define BAT_GND_EN_BASE      GPIO_PORTD_BASE //PD7
 
 #define ADC_TRIGGER_TIVA_BASE GPIO_PORTB_BASE //PB2
-#define CS_DAC1_BASE         GPIO_PORTE_BASE //PE0
+#define CS_ADC1_BASE         GPIO_PORTE_BASE //PE0
 #define MISO_GPIO_EX_BASE    GPIO_PORTF_BASE //PF0
 #define MOSI_ADC_BASE        GPIO_PORTB_BASE //PB7
 #define MISO_ADC_BASE        GPIO_PORTB_BASE //PB6
 #define SPI_MASTER_EGSE_BASE GPIO_PORTA_BASE //PA4
 #define CS2_GPIO_EX_BASE     GPIO_PORTA_BASE //PA3
 
+//================================
 
+//============ADC 2===============
+
+#define ADC_V2      AIN0
+#define ADC_I2      AIN1
+#define ADC_V5      AIN2
+#define ADC_I5      AIN3
+#define ADC_V3      AIN4
+#define ADC_I3      AIN5
+#define ADC_V1      AIN6
+#define ADC_I1      AIN7
+#define EXP_ADC1    AIN11
+#define EXP_ADC2    AIN12
+#define EXP_ADC3    AIN13
+#define EXP_ADC4    AIN14
+//#define ADC_TRIGGER AIN15
+
+//================================
+
+//============ADC 1===============
+
+#define ADC_BAT_I AIN0
+#define ADC_BAT_V AIN1
+#define ESGE_ADC1 AIN2
+#define ESGE_ADC2 AIN3
+#define ESGE_ADC3 AIN4
+#define ESGE_ADC4 AIN5
+#define ESGE_ADC5 AIN6
+#define ESGE_ADC6 AIN7
+#define ESGE_ADC7 AIN8
+#define ESGE_ADC8 AIN9
+#define ADC_V6    AIN10
+#define ADC_I6    AIN11
+#define ADC_I4    AIN12
+#define ADC_V4    AIN13
+//#define NULL    AIN14
 
 
 #endif /* TASKS_HARDWAREIOCONFIG_H_ */

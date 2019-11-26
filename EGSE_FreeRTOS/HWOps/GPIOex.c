@@ -1,6 +1,6 @@
 #include "GPIOex.h"
 
-#define psutest
+//#define psutest
 
 uint8_t msg[10];
 
@@ -109,7 +109,6 @@ void GPIOexWriteRegister(uint8_t exid, uint8_t addr){
     else{
         GPIOexReceiveRegSPI(exid, addr);
     }
-
 }
 
 
