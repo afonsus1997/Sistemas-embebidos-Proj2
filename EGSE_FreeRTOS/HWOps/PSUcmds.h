@@ -1,3 +1,6 @@
+#ifndef PSUCMDS_H_
+#define PSUCMDS_H_
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -10,6 +13,11 @@
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
 
-#include "../HWOps/HardwareIOConfig.h"
+#include "HWmsgtypes.h"
+#include "GPIOex.h"
+#include "HardwareIOConfig.h"
 
-void vHardwareIOInit();
+
+void PSUcmd(uint8_t opcode, HWPSUCmd_t * PSUmsg);
+
+#endif

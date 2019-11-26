@@ -1,3 +1,5 @@
+
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -9,7 +11,6 @@
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/ssi.h"
 
-#include "../HWOps/HardwareIOConfig.h"
-
-void vHardwareIOInit();
+void SPIinit();

@@ -9,46 +9,101 @@
 #define TASKS_HARDWAREIOCONFIG_H_
 
 #include "driverlib/gpio.h"
+#include "inc/hw_memmap.h"
+
+
+#define GPIOexPIN_21  0
+#define GPIOexPIN_22  1
+#define GPIOexPIN_23  2
+#define GPIOexPIN_24  3
+#define GPIOexPIN_25  4
+#define GPIOexPIN_26  5
+#define GPIOexPIN_27  6
+#define GPIOexPIN_28  7
+#define GPIOexPIN_1   8
+#define GPIOexPIN_2   9
+#define GPIOexPIN_3   10
+#define GPIOexPIN_4   11
+#define GPIOexPIN_5   12
+#define GPIOexPIN_6   13
+#define GPIOexPIN_7   14
+#define GPIOexPIN_8   15
 
 //=======GPIO Expander 1==========
-#define GPIO1 1 //GPB0
-#define GPIO2 2 //GPB1
-#define GPIO3 3 //GPB2
-#define GPIO4 4 //GPB3
-#define GPIO5 5 //GPB4
-#define GPIO6 6 //GPB5
-#define GPIO7 7 //GPB6
-#define GPIO8 8 //GPB7
+#define GPIO1 GPIOexPIN_1 //GPB0
+#define GPIO2 GPIOexPIN_2 //GPB1
+#define GPIO3 GPIOexPIN_3 //GPB2
+#define GPIO4 GPIOexPIN_4 //GPB3
+#define GPIO5 GPIOexPIN_5 //GPB4
+#define GPIO6 GPIOexPIN_6 //GPB5
+#define GPIO7 GPIOexPIN_7 //GPB6
+#define GPIO8 GPIOexPIN_8 //GPB7
 
-#define BAT_DISCHARGE1 21 //GPB0
-#define BAT_DISCHARGE0 22 //GPB1
-#define REG_PGOOD_3V3 23 //GPB2
-#define REG_EN_3V3 24 //GPB3
-#define REG_PGOOD_ALT 25 //GPB4
-#define REG_EN_ALT 26 //GPB5
-#define REG_PGOOD_MAIN 27 //GPB6
-#define REG_EN_MAIN 28 //GPB7
+#define BAT_DISCHARGE1 GPIOexPIN_21 //GPB0
+#define BAT_DISCHARGE0 GPIOexPIN_22 //GPB1
+#define REG_PGOOD_3V3 GPIOexPIN_23 //GPB2
+#define REG_EN_3V3 GPIOexPIN_24 //GPB3
+#define REG_PGOOD_ALT GPIOexPIN_25 //GPB4
+#define REG_EN_ALT GPIOexPIN_26 //GPB5
+#define REG_PGOOD_MAIN GPIOexPIN_27 //GPB6
+#define REG_EN_MAIN GPIOexPIN_28 //GPB7
+
+#define GPIO1_EXID 0 //GPB0
+#define GPIO2_EXID 0 //GPB1
+#define GPIO3_EXID 0 //GPB2
+#define GPIO4_EXID 0 //GPB3
+#define GPIO5_EXID 0 //GPB4
+#define GPIO6_EXID 0 //GPB5
+#define GPIO7_EXID 0 //GPB6
+#define GPIO8_EXID 0 //GPB7
+
+#define BAT_DISCHARGE1_EXID 0 //GPB0
+#define BAT_DISCHARGE0_EXID 0 //GPB1
+#define REG_PGOOD_3V3_EXID 0 //GPB2
+#define REG_EN_3V3_EXID 0 //GPB3
+#define REG_PGOOD_ALT_EXID 0 //GPB4
+#define REG_EN_ALT_EXID 0 //GPB5
+#define REG_PGOOD_MAIN_EXID 0 //GPB6
+#define REG_EN_MAIN_EXID 0 //GPB7
 
 //================================
 
 //=======GPIO Expander 2==========
-#define SW_EN2 1 //GPB0
-#define SW_EN1 2 //GPB1
-#define EOC1 3 //GPB2
-#define EOC2 4 //GPB3
-#define SW_EN4 5 //GPB4
-#define SW_EN3 6 //GPB5
-#define SW_EN6 7 //GPB6
-#define SW_EN5 8 //GPB7
+#define SW_EN2 GPIOexPIN_1 //GPB0
+#define SW_EN1 GPIOexPIN_2 //GPB1
+#define EOC1 GPIOexPIN_3 //GPB2
+#define EOC2 GPIOexPIN_4 //GPB3
+#define SW_EN4 GPIOexPIN_5 //GPB4
+#define SW_EN3 GPIOexPIN_6 //GPB5
+#define SW_EN6 GPIOexPIN_7 //GPB6
+#define SW_EN5 GPIOexPIN_8 //GPB7
 
-#define FP_EXP1 21 //GPB0
-#define FP_EXP2 22 //GPB1
-#define FP_EXP3 23 //GPB2
-#define FP_EXP4 24 //GPB3
-#define FP_EXP5 25 //GPB4
-#define ADC_SHUTDOWN 26 //GPB5
-#define ADC_TRIGGER 27 //GPB6
-#define NOT_CONNECTED 28 //GPB7
+#define FP_EXP1 GPIOexPIN_21 //GPB0
+#define FP_EXP2 GPIOexPIN_22 //GPB1
+#define FP_EXP3 GPIOexPIN_23 //GPB2
+#define FP_EXP4 GPIOexPIN_24 //GPB3
+#define FP_EXP5 GPIOexPIN_25 //GPB4
+#define ADC_SHUTDOWN GPIOexPIN_26 //GPB5
+#define ADC_TRIGGER GPIOexPIN_27 //GPB6
+#define NOT_CONNECTED GPIOexPIN_28 //GPB7
+
+#define SW_EN2_EXID 1 //GPB0
+#define SW_EN1_EXID 1//GPB1
+#define EOC1_EXID 1//GPB2
+#define EOC2_EXID 1//GPB3
+#define SW_EN4_EXID 1//GPB4
+#define SW_EN3_EXID 1//GPB5
+#define SW_EN6_EXID 1//GPB6
+#define SW_EN5_EXID 1//GPB7
+
+#define FP_EXP1_EXID 1//GPB0
+#define FP_EXP2_EXID 1//GPB1
+#define FP_EXP3_EXID 1//GPB2
+#define FP_EXP4_EXID 1//GPB3
+#define FP_EXP5_EXID 1//GPB4
+#define ADC_SHUTDOWN_EXID 1//GPB5
+#define ADC_TRIGGER_EXID 1//GPB6
+#define NOT_CONNECTED_EXID 1//GPB7
 
 //================================
 
@@ -104,7 +159,7 @@
 #define CS_EGSE_BASE         GPIO_PORTD_BASE //PD1
 #define MISO_EGSE_BASE       GPIO_PORTD_BASE //PD2
 #define MOSI_EGSE_BASE       GPIO_PORTD_BASE //PD3
-#define MOSI_GPIO_EX_BASE    GPIO_PORTF_BASE //PF1lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+#define MOSI_GPIO_EX_BASE    GPIO_PORTF_BASE //PF1
 
 #define SCK_GPIO_EX_BASE     GPIO_PORTF_BASE //PF2
 #define BAT_CHARGE_CTRL_BASE GPIO_PORTF_BASE //PF3

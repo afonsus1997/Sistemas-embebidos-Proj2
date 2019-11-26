@@ -1,3 +1,7 @@
+#ifndef HARDWARE_MANAGER_TASK_H_
+#define HARDWARE_MANAGER_TASK_H_
+
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -17,12 +21,16 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "../Funcs/GPIO.h"
+#include "../HWOps/GPIOex.h"
+#include "../HWOps/HWmsgtypes.h"
+#include "../HWOps/PSUcmds.h"
 
 
 
 #define HardwareManagerTaskSTACKSIZE        1000         // Stack size in words
 
-#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(uint8_t)
+#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(HWUnion_t)
 #define HARDWARE_QUEUE_QUEUE_SIZE          5
 
 xQueueHandle g_HardwareTaskQueueTX;
@@ -30,7 +38,8 @@ xQueueHandle g_HardwareTaskQueueRX;
 
 //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-uint32_t HardwareManagerTaskInit(void);
+uint32_t vHardwareManagerTaskINIT(void);
 
 static void vHardwareManagerTask(void *pvParameters);
 
+#endif
