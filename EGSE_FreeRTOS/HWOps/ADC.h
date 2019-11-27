@@ -30,7 +30,7 @@
 #define NUM_SSI_DATA 2
 
 /* Register of ADC's */
-#define CONVERSION 0x80
+#define CONVERSION 0b11111000//0x80
 #define SETUP      0x40
 #define AVERAGING  0x20
 #define RESET      0x10

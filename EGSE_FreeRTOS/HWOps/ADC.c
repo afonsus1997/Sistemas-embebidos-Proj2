@@ -82,10 +82,12 @@ void ADCreadFIFO(){
 
         for(ulindex = 0; ulindex < 2; ulindex++)
         {
-            SSIDataPut(SSI2_BASE, 0x00);
+            SSIDataPut(SSI2_BASE, 0);
+            //ADCwriteRegister(0, 0);
             while(SSIBusy(SSI2_BASE));
             while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
             while(SSIBusy(SSI2_BASE)){}
+
         }
 
         //bufflsb = bufflsb | buffmsb << 8;
