@@ -45,7 +45,7 @@ uint32_t vHardwareManagerTaskINIT(void)
 
     SPIinit();
 
-
+    vHardwareIOInit();
     //init GPIO expanders
     GPIOexBegin();
 
