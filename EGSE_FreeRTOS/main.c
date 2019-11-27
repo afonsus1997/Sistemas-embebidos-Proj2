@@ -68,10 +68,10 @@ int main(void)
         for(;;);
 
     if(vEGSEManagerTaskINIT()!= 0)
-      for(;;);
+        for(;;);
 
     if(vHardwareManagerTaskINIT()!= 0)
-      for(;;);
+        for(;;);
 
 
 

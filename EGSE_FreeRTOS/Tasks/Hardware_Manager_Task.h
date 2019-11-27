@@ -23,6 +23,7 @@
 #include "semphr.h"
 #include "../Funcs/GPIO.h"
 #include "../HWOps/GPIOex.h"
+#include "../HWOps/ADC.h"
 #include "../HWOps/HWmsgtypes.h"
 #include "../HWOps/PSUcmds.h"
 

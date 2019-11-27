@@ -109,7 +109,6 @@ void GPIOexWriteRegister(uint8_t exid, uint8_t addr){
     else{
         GPIOexReceiveRegSPI(exid, addr);
     }
-
 }
 
 
