@@ -57,7 +57,7 @@ void ADCinit(){
     ADCwriteRegister(0, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
 
     ADCwriteRegister(0, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
-    ADCwriteRegister(0, CONVERSION);
+    //ADCwriteRegister(0, CONVERSION);
 
     /* Program functions for ADC2 */
     //ADCwriteRegister(1, RESET & ~(1<<nRESET));
@@ -69,35 +69,30 @@ void ADCinit(){
 }
 
 void ADCreadFIFO(){
-    /* Chip Select ADC1 */
 
-    /* Write to conversion register to indicate to request data */
-    //ADCwriteRegister(0, CONVERSION);
+    ADCwriteRegister(0, CONVERSION);
 
-    SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000));
-    /* Toogle Chip Select to start the conversion */
-    ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0);
+    SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
+    ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0); //ask for values
 
-    uint32_t buffmsb;
-    uint8_t bufflsb;
     uint8_t i;
     uint8_t ulindex;
+    while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<AMM_CHANNEL;i++){
-        SSIDataPut(SSI2_BASE, 0x00);
 
-        while(SSIBusy(SSI2_BASE));
-
-        for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
+        for(ulindex = 0; ulindex < 2; ulindex++)
         {
-                // Receive the data using the "blocking" get function.
-                SSIDataGet(SSI1_BASE, &SPIrxbuf[ulindex]);
-
-                while(SSIBusy(SSI1_BASE)){}
+            SSIDataPut(SSI2_BASE, 0x00);
+            while(SSIBusy(SSI2_BASE));
+            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+            while(SSIBusy(SSI2_BASE)){}
         }
 
         //bufflsb = bufflsb | buffmsb << 8;
-        ADCFIFO[0][i] = SPIrxbuf[0] << 8 | SPIrxbuf[0];
+        ADCFIFO[0][i] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
     }
+
+
     //ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
 
     //================================================//
