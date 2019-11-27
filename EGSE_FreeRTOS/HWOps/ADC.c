@@ -7,7 +7,7 @@
 
 #include "ADC.h"
 
-uint16_t SPIrxbuf[2];
+uint32_t SPIrxbuf[10];
 
 void ADCToggleCS(uint32_t GPIOBASE, uint32_t GPIOPin, uint32_t state){
     if(state){
@@ -71,22 +71,33 @@ void ADCinit(){
 void ADCreadFIFO(){
 
     ADCwriteRegister(0, CONVERSION);
+    //ADCwriteRegister(0, CONVERSION);
 
     SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
     ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0); //ask for values
+
 
     uint8_t i;
     uint8_t ulindex;
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<AMM_CHANNEL;i++){
 
-        for(ulindex = 0; ulindex < 2; ulindex++)
-        {
+
+//        for(ulindex = 0; ulindex < 10; ulindex++)
+//        {
             SSIDataPut(SSI2_BASE, 0x00);
+
+            //ADCwriteRegister(0, 0);
             while(SSIBusy(SSI2_BASE));
-            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
-            while(SSIBusy(SSI2_BASE)){}
-        }
+            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0]) == 0);
+            //SSIDataGet(SSI2_BASE, &SPIrxbuf[0]);
+
+            SSIDataPut(SSI2_BASE, 0x00);
+            //ADCwriteRegister(0, 0);
+            while(SSIBusy(SSI2_BASE));
+            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[1]) == 0);
+            //SSIDataGet(SSI2_BASE, &SPIrxbuf[1]);
+//        }
 
         //bufflsb = bufflsb | buffmsb << 8;
         ADCFIFO[0][i] = SPIrxbuf[0] << 8 | SPIrxbuf[1];

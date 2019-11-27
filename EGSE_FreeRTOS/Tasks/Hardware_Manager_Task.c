@@ -42,10 +42,10 @@ uint32_t vHardwareManagerTaskINIT(void)
     g_HardwareTaskQueueRX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
 
 
-
     SPIinit();
 
     vHardwareIOInit();
+
     //init GPIO expanders
     GPIOexBegin();
 
