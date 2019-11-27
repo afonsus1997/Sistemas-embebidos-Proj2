@@ -37,13 +37,6 @@
 xQueueHandle g_HardwareTaskQueueTX;
 xQueueHandle g_HardwareTaskQueueRX;
 
-typedef struct __attribute__((packed)) {
-    uint16_t ADCs[25];
-    uint8_t GPIO[13];
-
-} LastReadings_t;
-
-LastReadings_t LastReadings;
 //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
 uint32_t vHardwareManagerTaskINIT(void);

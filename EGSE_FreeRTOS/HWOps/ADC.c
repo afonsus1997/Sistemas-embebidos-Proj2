@@ -55,15 +55,14 @@ void ADCinit(){
     /* Program functions for ADC1 */
     ADCwriteRegister(0, RESET & ~(1<<nRESET));
     ADCwriteRegister(0, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
-
     ADCwriteRegister(0, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
     //ADCwriteRegister(0, CONVERSION);
 
-    /* Program functions for ADC2 */
-    //ADCwriteRegister(1, RESET & ~(1<<nRESET));
-    //ADCwriteRegister(1, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
-    //ADCwriteRegister(1, CONVERSION);
-    //ADCwriteRegister(1, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
+    // Program functions for ADC2 */
+    ADCwriteRegister(1, RESET & ~(1<<nRESET));
+    ADCwriteRegister(1, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
+
+    ADCwriteRegister(1, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
 
     ADCreadFIFO();
 }
@@ -75,7 +74,7 @@ void ADCreadFIFO(){
     SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
     ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0); //ask for values
 
-    uint8_t i;
+    uint8_t i, channel = 0;
     uint8_t ulindex;
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<AMM_CHANNEL;i++){
@@ -90,30 +89,45 @@ void ADCreadFIFO(){
 
         }
 
-        //bufflsb = bufflsb | buffmsb << 8;
-        ADCFIFO[0][i] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
+        if(1){ //sets the read value range
+            //ADCFIFO[0][channel] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
+            LastReadings.ADCs[channel] = (SPIrxbuf[0] << 8) | SPIrxbuf[1];
+            channel++;
+        }
+
     }
 
+    ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
 
-    //ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
+    ADCwriteRegister(1, CONVERSION);
 
-    //================================================//
+    SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
+    ADCToggleCS(CS_ADC2_BASE,CS_ADC2,0); //ask for values
 
-    /* Chip Select ADC2 */
-
-    /* Write to conversion register to indicate to request data */
-    //ADCwriteRegister(1, CONVERSION);
-
-    /* Toogle Chip Select to start the conversion */
-    //ADCToggleCS(CS_ADC2_BASE,CS_ADC2, 0);
-
-    /*
+    //channel = 0;
+    while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<AMM_CHANNEL;i++){
-        SSIDataGet(SSI2_BASE, &buffadc);
-        buffadc = buffadc << 8;
-        SSIDataGet(SSI2_BASE, &buffadc);
-        ADCFIFO[1][i] = buffadc;
+
+        for(ulindex = 0; ulindex < 2; ulindex++)
+        {
+            SSIDataPut(SSI2_BASE, 0);
+            //ADCwriteRegister(0, 0);
+            while(SSIBusy(SSI2_BASE));
+            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+            while(SSIBusy(SSI2_BASE)){}
+
+        }
+
+        if(!(i >= 8 && i<= 10 )){
+            //ADCFIFO[1][i] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
+            LastReadings.ADCs[channel+14] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
+            channel++;
+        }
+
+        ADCToggleCS(CS_ADC2_BASE,CS_ADC2,1);
+
     }
-    ADCToggleCS(CS_ADC2_BASE,CS_ADC2,1);
-    */
+
+    //update values
+
 }

@@ -24,9 +24,10 @@
 #include "HardwareIOConfig.h"
 #include "../Funcs/SPI.h"
 #include "../funcs/GPIO.h"
+#include "../Tasks/Acquisition_Task.h"
 
 #define AMM_CHANNEL 15
-#define AMM_ADC
+#define AMM_ADC 2
 #define NUM_SSI_DATA 2
 
 /* Register of ADC's */
@@ -68,5 +69,8 @@ uint8_t ADCreadRegister(uint8_t ADCid);
 void ADCwriteRegister(uint8_t ADCid, uint8_t data);
 void ADCreadFIFO();
 void ADCwriteAll();
+
+extern LastReadings_t LastReadings;
+
 
 #endif /* HWOPS_ADC_H_ */
