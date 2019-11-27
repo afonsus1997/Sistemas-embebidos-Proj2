@@ -182,38 +182,38 @@
 
 //============ADC 2===============
 
-#define ADC_V2      AIN0
-#define ADC_I2      AIN1
-#define ADC_V5      AIN2
-#define ADC_I5      AIN3
-#define ADC_V3      AIN4
-#define ADC_I3      AIN5
-#define ADC_V1      AIN6
-#define ADC_I1      AIN7
-#define EXP_ADC1    AIN11
-#define EXP_ADC2    AIN12
-#define EXP_ADC3    AIN13
-#define EXP_ADC4    AIN14
+#define ADC_V2      0  //AIN0
+#define ADC_I2      1  //AIN1
+#define ADC_V5      2  //AIN2
+#define ADC_I5      3  //AIN3
+#define ADC_V3      4  //AIN4
+#define ADC_I3      5  //AIN5
+#define ADC_V1      6  //AIN6
+#define ADC_I1      7  //AIN7
+#define EXP_ADC1    11 //AIN11
+#define EXP_ADC2    12 //AIN12
+#define EXP_ADC3    13 //AIN13
+#define EXP_ADC4    14 //AIN14
 //#define ADC_TRIGGER AIN15
 
 //================================
 
 //============ADC 1===============
 
-#define ADC_BAT_I AIN0
-#define ADC_BAT_V AIN1
-#define ESGE_ADC1 AIN2
-#define ESGE_ADC2 AIN3
-#define ESGE_ADC3 AIN4
-#define ESGE_ADC4 AIN5
-#define ESGE_ADC5 AIN6
-#define ESGE_ADC6 AIN7
-#define ESGE_ADC7 AIN8
-#define ESGE_ADC8 AIN9
-#define ADC_V6    AIN10
-#define ADC_I6    AIN11
-#define ADC_I4    AIN12
-#define ADC_V4    AIN13
+#define ADC_BAT_I 0  //AIN0
+#define ADC_BAT_V 1  //AIN1
+#define ESGE_ADC1 2  //AIN2
+#define ESGE_ADC2 3  //AIN3
+#define ESGE_ADC3 4  //AIN4
+#define ESGE_ADC4 5  //AIN5
+#define ESGE_ADC5 6  //AIN6
+#define ESGE_ADC6 7  //AIN7
+#define ESGE_ADC7 8  //AIN8
+#define ESGE_ADC8 9  //AIN9
+#define ADC_V6    10 //AIN10
+#define ADC_I6    11 //AIN11
+#define ADC_I4    12 //AIN12
+#define ADC_V4    13 //AIN13
 //#define NULL    AIN14
 
 

@@ -27,6 +27,7 @@
 
 #define AMM_CHANNEL 15
 #define AMM_ADC
+#define NUM_SSI_DATA 2
 
 /* Register of ADC's */
 #define CONVERSION 0x80

@@ -21,7 +21,8 @@
 //#include "EGSE_Manager_Task.h"
 extern uint32_t UartRPITaskInit(void);
 extern uint32_t vEGSEManagerTaskINIT(void);
-
+extern uint32_t vHardwareManagerTaskINIT(void);
+extern uint32_t vAcquisitionTaskINIT(void);
 
 //windows
 //https://sites.google.com/site/luiselectronicprojects/tutorials/tiva-tutorials
@@ -72,6 +73,11 @@ int main(void)
 
     if(vHardwareManagerTaskINIT()!= 0)
         for(;;);
+
+//    if(vAcquisitionTaskINIT()!= 0)
+//            for(;;);
+
+
 
 
 

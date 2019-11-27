@@ -7,6 +7,8 @@
 
 #include "ADC.h"
 
+uint16_t SPIrxbuf[2];
+
 void ADCToggleCS(uint32_t GPIOBASE, uint32_t GPIOPin, uint32_t state){
     if(state){
         while(SSIBusy(SSI2_BASE));
@@ -79,36 +81,22 @@ void ADCreadFIFO(){
     uint32_t buffmsb;
     uint8_t bufflsb;
     uint8_t i;
+    uint8_t ulindex;
     for(i=0;i<AMM_CHANNEL;i++){
-//        ADCwriteRegister(0, CONVERSION);
+        SSIDataPut(SSI2_BASE, 0x00);
 
-        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+        while(SSIBusy(SSI2_BASE));
 
-        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+        for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
+        {
+                // Receive the data using the "blocking" get function.
+                SSIDataGet(SSI1_BASE, &SPIrxbuf[ulindex]);
 
-                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
+                while(SSIBusy(SSI1_BASE)){}
+        }
 
-                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-
-                                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-                                SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-
-                                        SSIDataPutNonBlocking(SSI2_BASE, CONVERSION);
-
-        SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000));
-
-        SSIDataGet(SSI2_BASE, &buffmsb);
-
-//        ADCwriteRegister(0, CONVERSION);
-
-        //while(SSIBusy(SSI2_BASE));
-
-        //SSIDataGet(SSI2_BASE, &bufflsb);
         //bufflsb = bufflsb | buffmsb << 8;
-        ADCFIFO[0][i] = buffmsb<<8 | bufflsb;
+        ADCFIFO[0][i] = SPIrxbuf[0] << 8 | SPIrxbuf[0];
     }
     //ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
 

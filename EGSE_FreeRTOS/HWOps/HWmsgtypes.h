@@ -49,25 +49,28 @@ typedef enum {
 } ADCReport_e;
 
 typedef enum {
-    ADC_V1, ADC_I1,
-    ADC_V2, ADC_I2,
-    ADC_V3, ADC_I3,
-    ADC_V4, ADC_I4,
-    ADC_V5, ADC_I5,
-    ADC_V6, ADC_I6,
+    ADC_V1_VAL, ADC_I1_VAL,
+    ADC_V2_VAL, ADC_I2_VAL,
+    ADC_V3_VAL, ADC_I3_VAL,
+    ADC_V4_VAL, ADC_I4_VAL,
+    ADC_V5_VAL, ADC_I5_VAL,
+    ADC_V6_VAL, ADC_I6_VAL,
     EGSE_ADC1, EGSE_ADC2,
     EGSE_ADC3, EGSE_ADC4,
     EGSE_ADC5, EGSE_ADC6,
     EGSE_ADC7, EGSE_ADC8,
     EXP_ADC1_VAL, EXP_ADC2_VAL,
     EXP_ADC3_VAL, EXP_ADC4_VAL,
+    BAT_V, BAT_I
+} ADCVals_e;
+
+typedef enum {
     GPIO_1, GPIO_2,
     GPIO_3, GPIO_4,
     GPIO_5, GPIO_6,
     GPIO_7, GPIO_8,
     GPIO_9, GPIO_10,
     GPIO_11, GPIO_12, GPIO_13,
-    BAT_V, BAT_I
-} ADCVals_e;
+} GPIOVals_e;
 
 #endif
