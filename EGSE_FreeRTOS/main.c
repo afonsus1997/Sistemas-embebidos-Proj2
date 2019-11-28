@@ -74,8 +74,8 @@ int main(void)
     if(vHardwareManagerTaskINIT()!= 0)
         for(;;);
 
-//    if(vAcquisitionTaskINIT()!= 0)
-//            for(;;);
+    if(vAcquisitionTaskINIT()!= 0)
+            for(;;);
 
 
 

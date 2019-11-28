@@ -25,11 +25,12 @@ static void vHardwareManagerTask(void *pvParameters)
     hwMSG.PSU.PSUsingle[PSUNum] = 3;
     hwMSG.PSU.PSUsingle[PSUState] = 1;
     hwMSG.PSU.header.opcode = HWOpcode_PSUSingle;
-    while (1)
-    {
+//    while (1)
+//    {
         //xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);
         //handleHWMsg(&hwMSG);
-    }
+//    }
+    vTaskDelete( NULL );
 }
 
 

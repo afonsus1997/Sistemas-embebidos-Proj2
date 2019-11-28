@@ -6,7 +6,7 @@
  */
 
 #include "ADC.h"
-
+//#define ADCSCANTEST
 uint16_t SPIrxbuf[2];
 
 void ADCToggleCS(uint32_t GPIOBASE, uint32_t GPIOPin, uint32_t state){
@@ -64,10 +64,18 @@ void ADCinit(){
 
     ADCwriteRegister(1, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
 
-    ADCreadFIFO();
+#ifdef ADCSCANTEST
+    while(1){
+        ADCreadFIFO();
+        SysCtlDelay(15000 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
+    }
+#endif
 }
 
 void ADCreadFIFO(){
+    ADCwriteRegister(0, RESET & ~(1<<nRESET));
+    ADCwriteRegister(0, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
+    ADCwriteRegister(0, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
 
     ADCwriteRegister(0, CONVERSION);
 
@@ -90,7 +98,6 @@ void ADCreadFIFO(){
         }
 
         if(1){ //sets the read value range
-            //ADCFIFO[0][channel] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
             LastReadings.ADCs[channel] = (SPIrxbuf[0] << 8) | SPIrxbuf[1];
             channel++;
         }
@@ -98,6 +105,13 @@ void ADCreadFIFO(){
     }
 
     ADCToggleCS(CS_ADC1_BASE,CS_ADC1,1);
+
+    // ADC2
+    ADCwriteRegister(1, RESET & ~(1<<nRESET));
+    ADCwriteRegister(1, (SETUP | (1<<REFSEL1) | (1<<CKSEL1)));
+
+    ADCwriteRegister(1, (AVERAGING | (1<<AVGON) | (1<<NAVG1)));
+
 
     ADCwriteRegister(1, CONVERSION);
 
@@ -119,7 +133,6 @@ void ADCreadFIFO(){
         }
 
         if(!(i >= 8 && i<= 10 )){
-            //ADCFIFO[1][i] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
             LastReadings.ADCs[channel+14] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
             channel++;
         }

@@ -35,8 +35,10 @@ void SPIinit(){
     SSIConfigSetExpClk(SSI1_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 500000, 8);
 
-    SSIConfigSetExpClk(SSI2_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
+    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 1000000, 8);
+    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
+                               SSI_MODE_MASTER, 500000, 8);
 
     SSIEnable(SSI0_BASE);
     SSIEnable(SSI1_BASE);

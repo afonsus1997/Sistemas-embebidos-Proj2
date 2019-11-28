@@ -13,9 +13,12 @@
 static void vAcquisitionTask(void *pvParameters)
 {
 
+    const TickType_t xAcquisitionDelay = 250 / portTICK_PERIOD_MS;
+
     while (1)
     {
-        //xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);
+        ADCreadFIFO();
+        vTaskDelay( xAcquisitionDelay );
     }
 }
 

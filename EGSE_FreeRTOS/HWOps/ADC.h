@@ -26,12 +26,12 @@
 #include "../funcs/GPIO.h"
 #include "../Tasks/Acquisition_Task.h"
 
-#define AMM_CHANNEL 15
+#define AMM_CHANNEL 16
 #define AMM_ADC 2
 #define NUM_SSI_DATA 2
 
 /* Register of ADC's */
-#define CONVERSION 0b11111000//0x80
+#define CONVERSION 0b10000010//0x80
 #define SETUP      0x40
 #define AVERAGING  0x20
 #define RESET      0x10

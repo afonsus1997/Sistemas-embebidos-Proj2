@@ -37,3 +37,5 @@ typedef struct __attribute__((packed)) {
 } LastReadings_t;
 
 LastReadings_t LastReadings;
+
+
