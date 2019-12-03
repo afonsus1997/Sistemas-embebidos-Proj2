@@ -25,7 +25,6 @@
 #include "../HWOps/GPIOex.h"
 #include "../HWOps/ADC.h"
 #include "../HWOps/LCD.h"
-#include "../HWOps/HWmsgtypes.h"
 #include "../HWOps/PSUcmds.h"
 
 
