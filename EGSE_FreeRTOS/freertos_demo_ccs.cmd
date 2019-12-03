@@ -46,7 +46,7 @@ MEMORY
     /* Application stored in and executes from internal flash */
     FLASH (RX) : origin = APP_BASE, length = 0x00040000
     /* Application uses internal RAM for data */
-    SRAM (RWX) : origin = 0x20000000, length = 0x00008000
+    SRAM (RWX) : origin = RAM_BASE, length = 0x00008000
 }
 
 /* Section allocation in memory */
@@ -58,6 +58,7 @@ SECTIONS
     .const  :   > FLASH
     .cinit  :   > FLASH
     .pinit  :   > FLASH
+    //.bss    :   > FLASH
     .init_array : > FLASH
 
     .vtable :   > RAM_BASE

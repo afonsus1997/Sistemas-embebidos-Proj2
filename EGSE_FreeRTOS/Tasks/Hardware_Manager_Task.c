@@ -45,10 +45,15 @@ uint32_t vHardwareManagerTaskINIT(void)
 
     vHardwareIOInit();
     //init GPIO expanders
-    GPIOexBegin();
+    //GPIOexBegin();
 
     //init ADC's
-    ADCinit();
+    //ADCinit();
+
+    while(1){
+        LCDinit();
+    }
+
 
     if (xTaskCreate(vHardwareManagerTask, (const portCHAR *)"HardwareManager", HardwareManagerTaskSTACKSIZE, NULL,
             tskIDLE_PRIORITY + PRIORITY_HARDWARE_TASK , NULL) != pdTRUE)

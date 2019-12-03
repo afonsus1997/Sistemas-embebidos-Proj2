@@ -23,7 +23,7 @@
 
 #include "HardwareIOConfig.h"
 #include "../Funcs/SPI.h"
-#include "../funcs/GPIO.h"
+#include "../Funcs/GPIO.h"
 #include "../Tasks/Acquisition_Task.h"
 
 #define AMM_CHANNEL 16

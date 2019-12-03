@@ -62,9 +62,6 @@ int main(void)
 
 
 
-
-
-
     if(UartRPITaskInit() != 0)
         for(;;);
 
@@ -75,9 +72,7 @@ int main(void)
         for(;;);
 
     if(vAcquisitionTaskINIT()!= 0)
-            for(;;);
-
-
+        for(;;);
 
 
 

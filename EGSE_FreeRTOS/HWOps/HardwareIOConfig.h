@@ -115,12 +115,14 @@
 #define I2C1_CLK        GPIO_PIN_4 //PE4
 #define I2C1_DATA       GPIO_PIN_5 //PE5
 #define SCK_ADC         GPIO_PIN_5 //PB5
-#define SPI_MASTER_FP   GPIO_PIN_5//PA5
+#define SPI_MASTER_FP   GPIO_PIN_5 //PA5
 #define I2C0_CLK        GPIO_PIN_6 //PA6
 #define I2C0_DATA       GPIO_PIN_7 //PA7
 
 #define SCK_EGSE        GPIO_PIN_0 //PD0
-#define CS_EGSE         GPIO_PIN_1 //PD1
+//#define CS_EGSE         GPIO_PIN_1 //PD1
+#define CS_LCD          GPIO_PIN_2 //PE2
+#define CS_SDCARD       GPIO_PIN_3 //PE3
 #define MISO_EGSE       GPIO_PIN_2 //PD2
 #define MOSI_EGSE       GPIO_PIN_3 //PD3
 #define MOSI_GPIO_EX    GPIO_PIN_1 //PF1
@@ -156,7 +158,9 @@
 #define I2C0_DATA_BASE       GPIO_PORTA_BASE //PA7
 
 #define SCK_EGSE_BASE        GPIO_PORTD_BASE //PD0
-#define CS_EGSE_BASE         GPIO_PORTD_BASE //PD1
+//#define CS_EGSE_BASE         GPIO_PORTD_BASE //PD1
+#define CS_LCD_BASE          GPIO_PORTE_BASE //PD1
+#define CS_SDCARD_BASE       GPIO_PORTE_BASE //PD1
 #define MISO_EGSE_BASE       GPIO_PORTD_BASE //PD2
 #define MOSI_EGSE_BASE       GPIO_PORTD_BASE //PD3
 #define MOSI_GPIO_EX_BASE    GPIO_PORTF_BASE //PF1
