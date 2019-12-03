@@ -1,7 +1,7 @@
 #include "SPI.h"
 
 void SPIinit(){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); //init SPI0 (FrontPanel)
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI3); //init SPI0 (FrontPanel)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); //init SPI1 (GPIOEX)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); //init SPI2 (ADC)
 
@@ -9,10 +9,10 @@ void SPIinit(){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 
-    GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+    GPIOPinConfigure(GPIO_PD0_SSI3CLK);
     //GPIOPinConfigure(GPIO_PB3_SSI0FSS);
-    GPIOPinConfigure(GPIO_PA4_SSI0RX); //miso
-    GPIOPinConfigure(GPIO_PA5_SSI0TX); //mosi
+    GPIOPinConfigure(GPIO_PD2_SSI3RX); //miso
+    GPIOPinConfigure(GPIO_PD3_SSI3TX); //mosi
 
     GPIOPinConfigure(GPIO_PF2_SSI1CLK);
     //GPIOPinConfigure(GPIO_PB3_SSI0FSS);
@@ -29,7 +29,7 @@ void SPIinit(){
     GPIOPinTypeSSI(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_0 | GPIO_PIN_1);
     GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_4 | GPIO_PIN_6 | GPIO_PIN_7);
 
-    SSIConfigSetExpClk(SSI0_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
+    SSIConfigSetExpClk(SSI3_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 1000000, 8);
 
     SSIConfigSetExpClk(SSI1_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
@@ -40,10 +40,7 @@ void SPIinit(){
     SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                                SSI_MODE_MASTER, 500000, 8);
 
-    SSIEnable(SSI0_BASE);
     SSIEnable(SSI1_BASE);
     SSIEnable(SSI2_BASE);
-
-
-
+    SSIEnable(SSI3_BASE);
 }

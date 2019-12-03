@@ -24,9 +24,9 @@
 #include "../Funcs/GPIO.h"
 #include "../HWOps/GPIOex.h"
 #include "../HWOps/ADC.h"
-//#include "../ETP/msgtypes.h"
+#include "../HWOps/LCD.h"
+#include "../HWOps/HWmsgtypes.h"
 #include "../HWOps/PSUcmds.h"
-
 
 
 #define HardwareManagerTaskSTACKSIZE        500         // Stack size in words

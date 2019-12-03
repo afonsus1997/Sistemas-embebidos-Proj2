@@ -62,9 +62,6 @@ int main(void)
 
 
 
-
-
-
     if(UartRPITaskInit() != 0)
         for(;;);
 
