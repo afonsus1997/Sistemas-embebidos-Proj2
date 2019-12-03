@@ -55,6 +55,12 @@ typedef struct __attribute__((packed)) {
     uint8_t data[256];
 } ETPUART0_t;
 
+typedef struct __attribute__((packed)) {
+    ETPHeader_t header;
+    uint8_t opcode;
+    uint8_t errcode;
+} ETPReply_t;
+
 typedef union {
     ETPHeader_t header;
     ETPMsgI2C_t msgI2C;
@@ -65,6 +71,7 @@ typedef union {
     ETPMsgI2CReplay_t msgI2CReplay;
     ETPSPI0_t spi0;
     ETPUART0_t uart0;
+    ETPReply_t etpreply;
 
     // maximum possible packet size (derived from ax25) + error margin
     uint8_t raw[sizeof(ETPHeader_t) + 256 + 16];

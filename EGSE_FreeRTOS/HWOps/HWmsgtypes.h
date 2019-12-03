@@ -10,7 +10,6 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     HWHeader_t header;
-    uint8_t PSUall[6];
     uint8_t PSUsingle[2];
 } HWPSUCmd_t;
 
@@ -28,7 +27,6 @@ typedef union {
 
 typedef enum {
     HWOpcode_Ack,
-    HWOpcode_PSUall,
     HWOpcode_PSUSingle,
     HWOpcode_ADCall,
     HWOpcode_ADCSingle,

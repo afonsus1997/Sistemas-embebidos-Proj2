@@ -7,9 +7,6 @@ HWUnion_t hwMSG;
 void handleHWMsg(HWUnion_t * msg){
     HWHeader_t * header = &msg->header;
     switch (header->opcode) {
-        case HWOpcode_PSUall :
-            PSUcmd(HWOpcode_PSUall, msg);
-            break;
         case HWOpcode_PSUSingle :
             PSUcmd(HWOpcode_PSUSingle, msg);
             break;
