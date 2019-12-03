@@ -17,7 +17,7 @@ static void vEGSEManagerTask(void *pvParameters){
 
         //test = &sUartRcv;
 
-        UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.raw[0]);
+        //UARTprintf("[EGSE Manager Task] - Recieved message from UART queue: %c\n", sUartRcv.raw[0]);
         //msg = (ETPUnion_t *)sUartRcv.rxBuff;
         //HARD CODING EXAMPLE
         //sUartRcv->header.opcode = ETPOpcode_Sync;

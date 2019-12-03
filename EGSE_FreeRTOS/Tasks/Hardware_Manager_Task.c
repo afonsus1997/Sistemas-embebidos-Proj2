@@ -1,14 +1,14 @@
 #include "Hardware_Manager_Task.h"
 
 
-HWUnion_t hwMSG;
+ETPUnion_t hwMSG;
 
 
-void handleHWMsg(HWUnion_t * msg){
-    HWHeader_t * header = &msg->header;
+void handleHWMsg(ETPUnion_t * msg){
+    ETPHeader_t * header = &msg->header;
     switch (header->opcode) {
-        case HWOpcode_PSUSingle :
-            PSUcmd(HWOpcode_PSUSingle, msg);
+        case ETPOpcode_PSUSingle :
+            PSUcmd(msg);
             break;
         default:
             break;
@@ -19,9 +19,9 @@ void handleHWMsg(HWUnion_t * msg){
 
 static void vHardwareManagerTask(void *pvParameters)
 {
-    hwMSG.PSU.PSUsingle[PSUNum] = 3;
-    hwMSG.PSU.PSUsingle[PSUState] = 1;
-    hwMSG.PSU.header.opcode = HWOpcode_PSUSingle;
+    hwMSG.etppsu.PSUsingle[PSUNum] = 3;
+    hwMSG.etppsu.PSUsingle[PSUState] = 1;
+    hwMSG.etppsu.header.opcode = ETPOpcode_PSUSingle;
 //    while (1)
 //    {
         //xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);

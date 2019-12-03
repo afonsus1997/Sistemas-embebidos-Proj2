@@ -37,6 +37,9 @@ void handle_EPTMsg(ETPUnion_t * msg){
     ETPHeader_t *header = &msg->header;
     ETPUnion_t *msgtemp;
 
+    UARTprintf("[EGSE Manager Task] - Got Opcode");
+    UARTprintf("%s\n", header->opcode);
+
     switch(header->opcode){
         case ETPOpcode_Sync: {
             UARTprintf("[EGSE Manager Task] - Got sync request from RPI\n");

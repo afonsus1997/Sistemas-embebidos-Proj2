@@ -13,11 +13,11 @@
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
 
-#include "HWmsgtypes.h"
+#include "ETP/msgtypes.h"
 #include "GPIOex.h"
 #include "HardwareIOConfig.h"
 
 
-void PSUcmd(uint8_t opcode, HWPSUCmd_t * PSUmsg);
+void PSUcmd(ETPPSUCmd_t * PSUmsg);
 
 #endif

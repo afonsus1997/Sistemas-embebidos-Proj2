@@ -71,11 +71,11 @@ int main(void)
     if(vEGSEManagerTaskINIT()!= 0)
         for(;;);
 
-    if(vHardwareManagerTaskINIT()!= 0)
-        for(;;);
-
-    if(vAcquisitionTaskINIT()!= 0)
-            for(;;);
+//    if(vHardwareManagerTaskINIT()!= 0)
+//        for(;;);
+//
+//    if(vAcquisitionTaskINIT()!= 0)
+//            for(;;);
 
 
 

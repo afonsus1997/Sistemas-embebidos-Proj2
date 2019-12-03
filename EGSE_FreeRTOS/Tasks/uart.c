@@ -101,9 +101,9 @@ uint32_t UartRPITaskInit(void)
     UARTClockSourceSet(UART3_BASE, UART_CLOCK_PIOSC);
 
 
-    //UARTStdioConfig(0, 57600, 16000000);
+    //UARTStdioConfig(3, 115200, 16000000);
 
-    //UARTStdioConfig(0, 57600, ROM_SysCtlClockGet());
+    UARTStdioConfig(3, 57600, ROM_SysCtlClockGet());
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 
@@ -112,7 +112,7 @@ uint32_t UartRPITaskInit(void)
     IntEnable(INT_UART0);
     //IntEnable(INT_UART3);
     UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
-    //UARTIntEnable(UART3_BASE, UART_INT_RX | UART_INT_RT);
+    UARTIntEnable(UART3_BASE, UART_INT_RX | UART_INT_RT);
 
     UARTIntRegister(UART0_BASE, &UARTInt0Handler);
 

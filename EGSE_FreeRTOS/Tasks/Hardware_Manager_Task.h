@@ -24,14 +24,14 @@
 #include "../Funcs/GPIO.h"
 #include "../HWOps/GPIOex.h"
 #include "../HWOps/ADC.h"
-#include "../HWOps/HWmsgtypes.h"
+//#include "../ETP/msgtypes.h"
 #include "../HWOps/PSUcmds.h"
 
 
 
 #define HardwareManagerTaskSTACKSIZE        500         // Stack size in words
 
-#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(HWUnion_t)
+#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(ETPUnion_t)
 #define HARDWARE_QUEUE_QUEUE_SIZE          5
 
 xQueueHandle g_HardwareTaskQueueTX;
