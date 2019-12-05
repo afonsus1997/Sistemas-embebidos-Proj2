@@ -71,7 +71,7 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     ETPHeader_t header;
     uint16_t ADCsingle[2];
-} ETPADCCmd_t;
+} ETPEGSEADCCmd_t;
 
 typedef enum {
     PSUNum,
@@ -123,7 +123,7 @@ typedef union {
     ETPUART0_t uart0;
     ETPReply_t etpreply;
     ETPPSUCmd_t etppsu;
-    ETPADCCmd_t etpadc;
+    ETPEGSEADCCmd_t etpEGSEAdc;
     //etpgpio
 
 
@@ -153,8 +153,15 @@ typedef enum {
     ETPOpcode_ADCSingle = 17,
     ETPOpcode_GPIOmode = 18,
     ETPOpcode_GPIOset = 19,
-    ETPOpcode_Reply = 20,
+    ETPOpcode_GPIOread = 20,
+    ETPOpcode_Reply = 21,
 
     ETPOpcode__num,
 
 } ETPOpcode_e;
+
+typedef enum {
+
+    InvalidPSUVal,
+    InvalidADCVal,
+} ETPErrCode_e;

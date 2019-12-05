@@ -36,6 +36,8 @@
 xQueueHandle g_HardwareTaskQueueTX;
 xQueueHandle g_HardwareTaskQueueRX;
 
+extern LastReadings_t LastReadings;
+
 //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
 uint32_t vHardwareManagerTaskINIT(void);
