@@ -39,7 +39,7 @@ static void vUartRPITask(void *pvParameters){
             //msg.header.opcode = ETPOpcode_Sync;
             //send msg to queue
 
-            UARTprintf("[UART Task] - Sent Message to UART queue\n");
+            //UARTprintf("[UART Task] - Sent Message to UART queue\n");
             xQueueSend(g_pUartRPIQueue, (void *) &msg, portMAX_DELAY);
 
 

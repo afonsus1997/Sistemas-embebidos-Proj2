@@ -63,7 +63,7 @@ uint32_t vHardwareManagerTaskINIT(void)
     ADCinit();
 
 
-    LCDinit();
+//    LCDinit();
 
 
 

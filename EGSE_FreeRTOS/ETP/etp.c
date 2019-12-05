@@ -103,6 +103,11 @@ void handle_EPTMsg(ETPUnion_t * msg){
            break;
        }
 
+       case ETPOpcode_PSUSingle: {
+          UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
+          break;
+      }
+
        default: {
            UARTprintf("[EGSE Manager Task] - Unknown opcode\n");
            break;
