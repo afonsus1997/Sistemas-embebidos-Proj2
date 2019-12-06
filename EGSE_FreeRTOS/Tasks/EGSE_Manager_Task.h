@@ -25,8 +25,8 @@
 #define EGSEManagerSTACKSIZE        500         // Stack size in words
 
 extern xQueueHandle g_pUartRPIQueue;
-extern xQueueHandle g_HardwareTaskQueueTX;
-extern xQueueHandle g_HardwareTaskQueueRX;
+extern xQueueHandle g_HardwareTaskQueueToHardware;
+extern xQueueHandle g_HardwareTaskQueueFromHardware;
 
 typedef volatile struct {
     uint8_t rxBuff[255];

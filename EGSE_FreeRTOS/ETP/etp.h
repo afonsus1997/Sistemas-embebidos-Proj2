@@ -5,6 +5,12 @@
 #include "inc/hw_nvic.h"
 #include "inc/hw_types.h"
 #include "FreeRTOS.h"
+#include "queue.h"
+
+
+extern xQueueHandle g_HardwareTaskQueueToHardware;
+extern xQueueHandle g_HardwareTaskQueueFromHardware;
+
 
 void EGSE_newHeader(ETPUnion_t *msg, ETPOpcode_e opcode, size_t size);
 

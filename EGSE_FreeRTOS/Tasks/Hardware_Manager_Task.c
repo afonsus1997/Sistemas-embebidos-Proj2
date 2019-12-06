@@ -30,12 +30,9 @@ void handleHWMsg(ETPUnion_t * msg){
 
 static void vHardwareManagerTask(void *pvParameters)
 {
-//    hwMSG.etppsu.PSUsingle[PSUNum] = 3;
-//    hwMSG.etppsu.PSUsingle[PSUState] = 1;
-//    hwMSG.etppsu.header.opcode = ETPOpcode_PSUSingle;
     while (1)
     {
-        xQueueReceive(g_HardwareTaskQueueRX, &hwMSG, portMAX_DELAY);
+        xQueueReceive(g_HardwareTaskQueueToHardware, &hwMSG, portMAX_DELAY);
         handleHWMsg(&hwMSG);
     }
     vTaskDelete( NULL );
@@ -47,8 +44,8 @@ static void vHardwareManagerTask(void *pvParameters)
 uint32_t vHardwareManagerTaskINIT(void)
 {
     //Create Hardware Queues
-    g_HardwareTaskQueueTX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
-    g_HardwareTaskQueueRX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
+    g_HardwareTaskQueueToHardware = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
+    g_HardwareTaskQueueFromHardware = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
 
 
 

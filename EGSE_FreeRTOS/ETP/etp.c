@@ -105,6 +105,8 @@ void handle_EPTMsg(ETPUnion_t * msg){
 
        case ETPOpcode_PSUSingle: {
           UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
+          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+
           break;
       }
 

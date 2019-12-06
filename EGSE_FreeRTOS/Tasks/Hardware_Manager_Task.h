@@ -33,8 +33,8 @@
 #define HARDWARE_QUEUE_ITEM_SIZE           sizeof(ETPUnion_t)
 #define HARDWARE_QUEUE_QUEUE_SIZE          5
 
-xQueueHandle g_HardwareTaskQueueTX;
-xQueueHandle g_HardwareTaskQueueRX;
+xQueueHandle g_HardwareTaskQueueFromHardware;
+xQueueHandle g_HardwareTaskQueueToHardware;
 
 extern LastReadings_t LastReadings;
 
