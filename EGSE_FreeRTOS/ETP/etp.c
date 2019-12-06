@@ -110,6 +110,29 @@ void handle_EPTMsg(ETPUnion_t * msg){
           break;
       }
 
+       case ETPOpcode_ADCSingle: {
+          UARTprintf("[EGSE Manager Task] - Got EGSEADCsingle opcode\n");
+          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+          break;
+      }
+
+       case ETPOpcode_GPIOread: {
+          UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
+          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+          break;
+      }
+
+       case ETPOpcode_GPIOset: {
+            UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+            break;
+       }
+       case ETPOpcode_GPIOmode: {
+            UARTprintf("[EGSE Manager Task] - Got GPIOset opcode\n");
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+            break;
+    }
+
        default: {
            UARTprintf("[EGSE Manager Task] - Unknown opcode\n");
            break;
