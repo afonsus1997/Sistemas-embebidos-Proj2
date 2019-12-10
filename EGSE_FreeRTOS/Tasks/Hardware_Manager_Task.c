@@ -3,6 +3,15 @@
 
 ETPUnion_t hwMSG;
 
+uint8_t SW_EN_map[6] = {SW_EN1, SW_EN2, SW_EN3, SW_EN4, SW_EN5, SW_EN6};
+
+
+void PSUcmd(ETPPSUCmd_t * PSUmsg){
+    UARTprintf((uint8_t)PSUmsg->id);printf(" to  "); UARTprintf((uint8_t)PSUmsg->state);
+    GPIOexGPIOWrite(1, SW_EN_map[(uint8_t)PSUmsg->id], (uint8_t)PSUmsg->state);
+}
+
+
 
 void HandleADCRequest(ETPUnion_t *msg){
     if(LastReadings.ADCs[msg->etpEGSEAdc.ADCsingle[ADCNum]] != NULL)
@@ -14,12 +23,15 @@ void HandleADCRequest(ETPUnion_t *msg){
 
 void handleHWMsg(ETPUnion_t * msg){
     ETPHeader_t * header = &msg->header;
+    ETPPSUCmd_t * psu = &msg->etppsu;
+    UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
     switch (header->opcode) {
         case ETPOpcode_PSUSingle :
-            PSUcmd((ETPPSUCmd_t * ) msg);
+            UARTprintf("[EGSE Hardware Task] - Setting PSU");
+            PSUcmd(psu);
             break;
         case ETPOpcode_ADCSingle :
-            HandleADCRequest((ETPEGSEADCCmd_t * ) msg);
+            HandleADCRequest(psu);
             break;
         default:
             break;

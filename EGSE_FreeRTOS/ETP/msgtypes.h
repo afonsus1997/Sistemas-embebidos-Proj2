@@ -65,7 +65,8 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     ETPHeader_t header;
-    uint8_t PSUsingle[2];
+    uint8_t id;
+    uint8_t state;
 } ETPPSUCmd_t;
 
 typedef struct __attribute__((packed)) {

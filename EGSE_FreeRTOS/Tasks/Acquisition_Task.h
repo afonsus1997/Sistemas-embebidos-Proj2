@@ -28,7 +28,7 @@
 #include "../HWOps/HardwareIOConfig.h"
 
 
-#define AcquisitionTaskSTACKSIZE        500         // Stack size in words
+#define AcquisitionTaskSTACKSIZE        100         // Stack size in words
 
 typedef struct __attribute__((packed)) {
     uint16_t ADCs[25];

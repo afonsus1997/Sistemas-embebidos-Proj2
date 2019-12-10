@@ -5,7 +5,7 @@ static void vEGSEManagerTask(void *pvParameters){
     //uartmsg_t sUartRcv;
 
     ETPUnion_t sUartRcv ;
-    ETPUnion_t * test;
+//    ETPUnion_t * test;
 
     static size_t endOfMsg = sizeof(ETPHeader_t); //needed later to check if msg has header
     bool hasHeader;
@@ -13,8 +13,15 @@ static void vEGSEManagerTask(void *pvParameters){
 
     while(1){
 
-        xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY);
+        //xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY);
+        ETPPSUCmd_t test;
+        sUartRcv.header.opcode= ETPOpcode_PSUSingle;
+        sUartRcv.etppsu.id = 1;
+        sUartRcv.etppsu.state = 1;
+
         handle_EPTMsg(&sUartRcv);
+
+        while(1);
 
     }
 
