@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * freertos_demo_ccs.cmd - CCS linker configuration file for freertos_demo.
+ * grlib_demo_ccs.cmd - CCS linker configuration file for grlib_demo.
  *
  * Copyright (c) 2012-2017 Texas Instruments Incorporated.  All rights reserved.
  * Software License Agreement
@@ -67,4 +67,4 @@ SECTIONS
     .stack  :   > SRAM
 }
 
-__STACK_TOP = __stack + 512;
+__STACK_TOP = __stack + 1024;

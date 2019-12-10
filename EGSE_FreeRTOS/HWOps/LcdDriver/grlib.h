@@ -114,17 +114,6 @@ typedef struct Graphics_Display
     uint16_t heigth;			//!< The height of this display.
     void (*callPixelDraw)(void *displayData, int16_t x, int16_t y,
     		uint16_t value);	//!< A pointer to the function to draw a pixel on this display.
-    void (*callPixelDrawMultiple)(void *displayData, int16_t x, int16_t y,
-    		int16_t x0, int16_t count, int16_t bPP, const uint8_t *data,
-    		const uint32_t *pucPalette);	//!< A pointer to the function to draw multiple pixels on this display.
-    void (*callLineDrawH)(void *displayData, int16_t x1, int16_t x2, int16_t y,
-    		uint16_t value);	//!< A pointer to the function to draw a horizontal line on this display.
-    void (*callLineDrawV)(void *displayData, int16_t x, int16_t y1,
-    		int16_t y2, uint16_t value); //!< A pointer to the function to draw a vertical line on this display.
-    void (*callRectFill)(void *displayData, const Graphics_Rectangle *rect,
-    		uint16_t value);	//!< A pointer to the function to draw a filled rectangle on this display.
-    uint32_t (*callColorTranslate)(void *displayData, uint32_t  value);	//!< A pointer to the function to translate 24-bit RGB colors to display-specific colors.
-    void (*callFlush)(void *displayData); //!< A pointer to the function to flush any cached drawing operations on this display.
     void (*callClearDisplay)(void *displayData, uint16_t value); //!<  A pointer to the function to clears Display. Contents of display buffer unmodified
 } Graphics_Display;
 

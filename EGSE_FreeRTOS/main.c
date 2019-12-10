@@ -60,41 +60,23 @@ int main(void)
     ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
                        SYSCTL_OSC_MAIN);
 
-
-
     if(UartRPITaskInit() != 0)
         for(;;);
 
-    if(vEGSEManagerTaskINIT()!= 0)
-        for(;;);
-
-    if(vHardwareManagerTaskINIT()!= 0)
+    if(vEGSEManagerTaskINIT() != 0)
         for(;;);
 
     if(vAcquisitionTaskINIT()!= 0)
         for(;;);
 
-
+    if(vHardwareManagerTaskINIT()!= 0)
+        for(;;);
 
     IntMasterEnable();
 
-    //
-    // Create the LED task.
-    //
-    //if(LEDTaskInit() != 0)
-    //    for(;;);
-
-    //
-    // Create the switch task.
-    //
-    //if(SwitchTaskInit() != 0)
-    //    for(;;);
-
-    //
-    // Start the scheduler.  This should not return.
-    //
     UARTprintf("[FreeRTOS] - Starting scheduler...\n");
 
+    // Start the scheduler.  This should not return.
     vTaskStartScheduler();
 
     //

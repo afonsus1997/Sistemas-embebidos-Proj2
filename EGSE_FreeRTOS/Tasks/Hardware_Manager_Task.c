@@ -2,6 +2,7 @@
 
 
 HWUnion_t hwMSG;
+void *displayData;
 
 
 void handleHWMsg(HWUnion_t * msg){
@@ -39,21 +40,22 @@ uint32_t vHardwareManagerTaskINIT(void)
     g_HardwareTaskQueueTX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
     g_HardwareTaskQueueRX = xQueueCreate(HARDWARE_QUEUE_ITEM_SIZE, HARDWARE_QUEUE_QUEUE_SIZE);
 
-
-
     SPIinit();
 
     vHardwareIOInit();
     //init GPIO expanders
-    //GPIOexBegin();
+    GPIOexBegin();
 
     //init ADC's
-    //ADCinit();
 
+    ADCinit();
+
+    Sharp128x128_initDisplay();
     while(1){
-        LCDinit();
+        Sharp128x128_ClearScreen(displayData, ClrBlack);
+        //displayData = "Hello\n";
+        //Sharp128x128_PixelDraw(displayData, 20, 20, ClrBlack);
     }
-
 
     if (xTaskCreate(vHardwareManagerTask, (const portCHAR *)"HardwareManager", HardwareManagerTaskSTACKSIZE, NULL,
             tskIDLE_PRIORITY + PRIORITY_HARDWARE_TASK , NULL) != pdTRUE)
