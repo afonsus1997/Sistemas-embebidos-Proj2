@@ -28,10 +28,10 @@
 #include "../HWOps/PSUcmds.h"
 
 
-#define HardwareManagerTaskSTACKSIZE        500         // Stack size in words
+#define HardwareManagerTaskSTACKSIZE        1000         // Stack size in words
 
-#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(ETPUnion_t)
-#define HARDWARE_QUEUE_QUEUE_SIZE          5
+#define HARDWARE_QUEUE_ITEM_SIZE           sizeof(ETPUnionHW_t)
+#define HARDWARE_QUEUE_QUEUE_SIZE          10
 
 xQueueHandle g_HardwareTaskQueueFromHardware;
 xQueueHandle g_HardwareTaskQueueToHardware;

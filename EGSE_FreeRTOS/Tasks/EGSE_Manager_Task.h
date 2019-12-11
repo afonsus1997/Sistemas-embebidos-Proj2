@@ -22,7 +22,7 @@
 //test
 
 
-#define EGSEManagerSTACKSIZE        500         // Stack size in words
+#define EGSEManagerSTACKSIZE        1000         // Stack size in words
 
 extern xQueueHandle g_pUartRPIQueue;
 extern xQueueHandle g_HardwareTaskQueueToHardware;
@@ -43,4 +43,7 @@ static void vEGSEManagerTask(void *pvParameters);
 uint32_t vEGSEManagerTaskINIT(void);
 
 extern void handle_EPTMsg(ETPUnion_t *msg);
+
+extern void HandleHWRX(ETPUnionHW_t * HWmsg);
+
 

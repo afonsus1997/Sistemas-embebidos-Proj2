@@ -71,7 +71,8 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     ETPHeader_t header;
-    uint16_t ADCsingle[2];
+    uint8_t ADCNum;
+    uint16_t ADCVal;
 } ETPEGSEADCCmd_t;
 
 typedef enum {
@@ -131,6 +132,17 @@ typedef union {
     // maximum possible packet size (derived from ax25) + error margin
     uint8_t raw[sizeof(ETPHeader_t) + 256 + 16];
 } ETPUnion_t;
+
+typedef union {
+    ETPHeader_t header;
+    ETPETPOCMState_t ocmState;
+    ETPReply_t etpreply;
+    ETPPSUCmd_t etppsu;
+    ETPEGSEADCCmd_t etpEGSEAdc;
+    //etpgpio
+} ETPUnionHW_t;
+
+
 
 // NOTE: Must match the enum in src/python/egse.py
 typedef enum {

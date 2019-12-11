@@ -13,25 +13,29 @@ void PSUcmd(ETPPSUCmd_t * PSUmsg){
 
 
 
-void HandleADCRequest(ETPUnion_t *msg){
-    if(LastReadings.ADCs[msg->etpEGSEAdc.ADCsingle[ADCNum]] != NULL)
-        msg->etpEGSEAdc.ADCsingle[ADCVal] = LastReadings.ADCs[msg->etpEGSEAdc.ADCsingle[ADCNum]];
+void HandleADCRequest(ETPUnionHW_t *msg){
+    if(LastReadings.ADCs[msg->etpEGSEAdc.ADCNum] != NULL)
+        msg->etpEGSEAdc.ADCVal = LastReadings.ADCs[msg->etpEGSEAdc.ADCNum];
     //else
         //return error reply
     return;
 }
 
 void handleHWMsg(ETPUnion_t * msg){
-    ETPHeader_t * header = &msg->header;
-    ETPPSUCmd_t * psu = &msg->etppsu;
+
+    ETPUnionHW_t * hwMSG;
+    hwMSG->header.opcode = &msg->header;
     UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
-    switch (header->opcode) {
+    switch (hwMSG->header.opcode) {
         case ETPOpcode_PSUSingle :
             UARTprintf("[EGSE Hardware Task] - Setting PSU");
-            PSUcmd(psu);
+            hwMSG = &msg->etppsu;
+            PSUcmd(hwMSG);
             break;
         case ETPOpcode_ADCSingle :
-            HandleADCRequest(psu);
+            hwMSG = &msg->etpEGSEAdc;
+            HandleADCRequest(hwMSG);
+            xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
         default:
             break;

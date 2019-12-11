@@ -36,7 +36,8 @@ void EGSE_sendPong(ETPUnion_t *msg) {
 void handle_EPTMsg(ETPUnion_t * msg){
     ETPHeader_t *header = &msg->header;
     ETPUnion_t * msgtemp;
-    ETPUnion_t test;
+    ETPUnionHW_t hwmsg;
+
 
     //UARTprintf("[EGSE Manager Task] - Got Opcode");
     //UARTprintf("%s\n", header->opcode);
@@ -106,15 +107,15 @@ void handle_EPTMsg(ETPUnion_t * msg){
 
        case ETPOpcode_PSUSingle: {
           UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
-          memcpy(&test, msg, sizeof(ETPUnion_t));
-          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &test, portMAX_DELAY);
-
+          memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
           break;
       }
 
        case ETPOpcode_ADCSingle: {
           UARTprintf("[EGSE Manager Task] - Got EGSEADCsingle opcode\n");
-          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+          memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
           break;
       }
 
@@ -143,3 +144,13 @@ void handle_EPTMsg(ETPUnion_t * msg){
     }
 
 }
+
+
+void HandleHWRX(ETPUnionHW_t * HWmsg){
+    ETPUnion_t toUART;
+
+    memcpy(&toUART, HWmsg, sizeof(ETPUnionHW_t));
+    EGSE_sendUARTRPI(&toUART);
+
+}
+
