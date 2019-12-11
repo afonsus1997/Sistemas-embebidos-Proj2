@@ -14,18 +14,18 @@ static void vEGSEManagerTask(void *pvParameters){
     portBASE_TYPE xStatusTX;
 
     while(1){
-
-//        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, portMAX_DELAY);
-        sUartRcv.header.opcode= ETPOpcode_ADCSingle;
-        sUartRcv.etpEGSEAdc.ADCNum = 1;
-//        if(xStatusRX == pdTRUE)
+        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 0);
+//        sUartRcv.header.opcode= ETPOpcode_ADCSingle;
+//        sUartRcv.header.opcode= ETPOpcode_PSUSingle;
+//        sUartRcv.etpEGSEAdc.ADCNum = 1;
+        if(xStatusRX == pdTRUE)
             handle_EPTMsg(&sUartRcv);
 
 
         //check if theres hw messages to send back to uart
-        xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, portMAX_DELAY);
+        xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 0);
         if(xStatusTX == pdTRUE)
-                HandleHWRX(&sHWRcv);
+            HandleHWRX(&sHWRcv);
     }
 
 }

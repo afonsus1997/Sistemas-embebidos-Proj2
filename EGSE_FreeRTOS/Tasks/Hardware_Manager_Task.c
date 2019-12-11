@@ -13,9 +13,12 @@ void PSUcmd(ETPPSUCmd_t * PSUmsg){
 
 
 
-void HandleADCRequest(ETPUnionHW_t *msg){
-    if(LastReadings.ADCs[msg->etpEGSEAdc.ADCNum] != NULL)
-        msg->etpEGSEAdc.ADCVal = LastReadings.ADCs[msg->etpEGSEAdc.ADCNum];
+void HandleADCRequest(ETPUnionHW_t * msgin){
+    if(LastReadings.ADCs[msgin->etpEGSEAdc.ADCNum] != NULL)
+//        msgin->etpEGSEAdc.ADCVal = LastReadings.ADCs[msgin->etpEGSEAdc.ADCNum];
+        msgin->etpEGSEAdc.ADCVal = 0;
+
+
     //else
         //return error reply
     return;
@@ -23,18 +26,21 @@ void HandleADCRequest(ETPUnionHW_t *msg){
 
 void handleHWMsg(ETPUnion_t * msg){
 
-    ETPUnionHW_t * hwMSG;
-    hwMSG->header.opcode = &msg->header;
+    ETPUnionHW_t hwMSG;
+    hwMSG.header.opcode = &msg->header.opcode;
     UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
-    switch (hwMSG->header.opcode) {
+    switch (msg->header.opcode) {
         case ETPOpcode_PSUSingle :
             UARTprintf("[EGSE Hardware Task] - Setting PSU");
-            hwMSG = &msg->etppsu;
-            PSUcmd(hwMSG);
+//            hwMSG = &msg->etppsu;
+            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
+            PSUcmd(&hwMSG);
             break;
         case ETPOpcode_ADCSingle :
-            hwMSG = &msg->etpEGSEAdc;
-            HandleADCRequest(hwMSG);
+            UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
+            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
+            hwMSG.etpEGSEAdc.ADCVal = 0;
+            UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf((uint16_t)hwMSG.etpEGSEAdc.ADCVal);UARTprintf("\n");
             xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
         default:

@@ -48,6 +48,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
             EGSE_ready = true;
             EGSE_sendSync(msgtemp);
             EGSE_sendLog(msgtemp, "Hi there!");
+            UARTprintf("[EGSE Manager Task] - Sent sync to RPI\n");
             break;
        }
         case ETPOpcode_DeSync: {
@@ -115,7 +116,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
        case ETPOpcode_ADCSingle: {
           UARTprintf("[EGSE Manager Task] - Got EGSEADCsingle opcode\n");
           memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
-          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
+         xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
           break;
       }
 
@@ -127,7 +128,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
 
        case ETPOpcode_GPIOset: {
             UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
-            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+            //xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
             break;
        }
        case ETPOpcode_GPIOmode: {

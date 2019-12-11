@@ -22,7 +22,7 @@
 //test
 
 
-#define EGSEManagerSTACKSIZE        1000         // Stack size in words
+#define EGSEManagerSTACKSIZE        500         // Stack size in words
 
 extern xQueueHandle g_pUartRPIQueue;
 extern xQueueHandle g_HardwareTaskQueueToHardware;
