@@ -43,8 +43,17 @@ void handleHWMsg(ETPUnion_t * msg){
             xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
         case ETPOpcode_GPIOmode :
-            UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
+            UARTprintf("[EGSE Hardware Task] - Setting GPIO Mode\n");
             GPIOcmd(&hwMSG.etpgpio);
+            break;
+        case ETPOpcode_GPIOwrite :
+            UARTprintf("[EGSE Hardware Task] - Writting GPIO Value\n");
+            GPIOcmd(&hwMSG.etpgpio);
+            break;
+        case ETPOpcode_GPIOread :
+            UARTprintf("[EGSE Hardware Task] - Reading GPIO\n");
+            GPIOcmd(&hwMSG.etpgpio);
+            //return message
             break;
 
         default:

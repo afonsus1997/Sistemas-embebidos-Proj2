@@ -40,9 +40,10 @@ uint8_t GPIOcmd(ETPGPIOCmd_t * msg){
         case ETPOpcode_GPIOwrite :
             GPIOexGPIOWrite(0, GPIOex1PinMap[msg->id], msg->Val);
         case ETPOpcode_GPIOread :
-            return GPIOexGPIORead(0, GPIOex1PinMap[msg->id]);
-
+            msg->Val = GPIOexGPIORead(0, GPIOex1PinMap[msg->id]);
+            return 1;
         default:
             break;
+        return 0;
     }
 }
