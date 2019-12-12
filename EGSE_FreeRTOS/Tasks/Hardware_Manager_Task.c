@@ -27,22 +27,26 @@ void HandleADCRequest(ETPUnionHW_t * msgin){
 void handleHWMsg(ETPUnion_t * msg){
 
     ETPUnionHW_t hwMSG;
+    memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
     hwMSG.header.opcode = &msg->header.opcode;
     UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
     switch (msg->header.opcode) {
         case ETPOpcode_PSUSingle :
             UARTprintf("[EGSE Hardware Task] - Setting PSU");
 //            hwMSG = &msg->etppsu;
-            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
-            PSUcmd(&hwMSG);
+            PSUcmd(&hwMSG.etppsu);
             break;
         case ETPOpcode_ADCSingle :
             UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
-            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
             hwMSG.etpEGSEAdc.ADCVal = 0;
             UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf((uint16_t)hwMSG.etpEGSEAdc.ADCVal);UARTprintf("\n");
             xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
+        case ETPOpcode_GPIOmode :
+            UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
+            GPIOcmd(&hwMSG.etpgpio);
+            break;
+
         default:
             break;
     }

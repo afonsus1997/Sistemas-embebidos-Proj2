@@ -126,7 +126,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
           break;
       }
 
-       case ETPOpcode_GPIOset: {
+       case ETPOpcode_GPIOwrite: {
             UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
             //xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
             break;

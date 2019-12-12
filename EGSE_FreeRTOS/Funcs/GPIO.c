@@ -31,3 +31,18 @@ void vHardwareIOInit(){
 //    for(;;);
 
 }
+
+
+uint8_t GPIOcmd(ETPGPIOCmd_t * msg){
+    switch(msg->header.opcode){
+        case ETPOpcode_GPIOmode :
+            GPIOexPinMode(0, GPIOex1PinMap[msg->id], msg->Val);
+        case ETPOpcode_GPIOwrite :
+            GPIOexGPIOWrite(0, GPIOex1PinMap[msg->id], msg->Val);
+        case ETPOpcode_GPIOread :
+            return GPIOexGPIORead(0, GPIOex1PinMap[msg->id]);
+
+        default:
+            break;
+    }
+}

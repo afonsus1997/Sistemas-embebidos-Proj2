@@ -26,6 +26,7 @@
 #include "../HWOps/ADC.h"
 #include "../HWOps/LCD.h"
 #include "../HWOps/PSUcmds.h"
+#include "../Funcs/GPIO.h"
 
 
 #define HardwareManagerTaskSTACKSIZE        1000         // Stack size in words

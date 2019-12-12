@@ -63,5 +63,8 @@ uint16_t getInterruptPins();
 uint16_t getInterruptValue();
 void setInterruptLevel(uint8_t level);
 //void setInterruptOD(boolean openDrain);
+void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value);
+uint8_t GPIOexGPIORead(uint8_t exid, uint8_t pin);
+
 
 #endif

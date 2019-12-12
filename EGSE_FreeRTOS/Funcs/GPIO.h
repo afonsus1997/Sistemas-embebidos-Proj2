@@ -1,3 +1,7 @@
+#ifndef GPIO_H_
+#define GPIO_H_
+
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "inc/hw_memmap.h"
@@ -11,5 +15,13 @@
 #include "driverlib/sysctl.h"
 
 #include "../HWOps/HardwareIOConfig.h"
+#include "../ETP/msgtypes.h"
+#include "../HWOps/GPIOex.h"
 
 void vHardwareIOInit();
+
+uint8_t GPIOcmd(ETPGPIOCmd_t * msg);
+
+extern uint8_t GPIOex1PinMap[];
+
+#endif
