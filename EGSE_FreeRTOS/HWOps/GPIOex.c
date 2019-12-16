@@ -1,5 +1,8 @@
 #include "GPIOex.h"
 
+uint8_t GPIOex0PinMap[8] = {GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7};
+
+
 //#define psutest
 
 uint8_t msg[10];
@@ -184,7 +187,27 @@ void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value){
 
 }
 
+uint8_t GPIOexGPIORead(uint8_t exid, uint8_t pin){
+    if (pin >= 16) {
+        return;
+    }
+    uint8_t dirReg = IODIRA;
+    uint8_t puReg = GPPUA;
+    uint8_t latReg = OLATA;
+    if (pin >= 8) {
+        pin -= 8;
+        dirReg = IODIRB;
+        puReg = GPPUB;
+        latReg = OLATB;
+    }
 
+    uint8_t mode = (EXreg[exid][dirReg] & (1<<pin)) == 0 ? OUTPUT : INPUT;
+
+
+
+    return 1;
+
+}
 
 void GPIOexBegin(){
 
@@ -258,12 +281,12 @@ void GPIOexBegin(){
     GPIOexPinMode(SW_EN5_EXID, SW_EN5, OUTPUT);
     GPIOexPinMode(SW_EN6_EXID, SW_EN6, OUTPUT);
     //set default psu output as 0
-    GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, 0);
-    GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, 0);
-    GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, 0);
-    GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, 0);
-    GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, 0);
-    GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, 0);
+    GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, 1);
+    GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, 1);
+    GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, 1);
+    GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, 1);
+    GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, 1);
+    GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, 1);
 
     //define front panel exp as outputs
     GPIOexPinMode(FP_EXP1_EXID, FP_EXP1, OUTPUT);

@@ -30,14 +30,14 @@
 #define GPIOexPIN_8   15
 
 //=======GPIO Expander 1==========
-#define GPIO1 GPIOexPIN_1 //GPB0
-#define GPIO2 GPIOexPIN_2 //GPB1
-#define GPIO3 GPIOexPIN_3 //GPB2
-#define GPIO4 GPIOexPIN_4 //GPB3
-#define GPIO5 GPIOexPIN_5 //GPB4
-#define GPIO6 GPIOexPIN_6 //GPB5
-#define GPIO7 GPIOexPIN_7 //GPB6
-#define GPIO8 GPIOexPIN_8 //GPB7
+#define GPIO0 GPIOexPIN_1 //GPB0
+#define GPIO1 GPIOexPIN_2 //GPB1
+#define GPIO2 GPIOexPIN_3 //GPB2
+#define GPIO3 GPIOexPIN_4 //GPB3
+#define GPIO4 GPIOexPIN_5 //GPB4
+#define GPIO5 GPIOexPIN_6 //GPB5
+#define GPIO6 GPIOexPIN_7 //GPB6
+#define GPIO7 GPIOexPIN_8 //GPB7
 
 #define BAT_DISCHARGE1 GPIOexPIN_21 //GPB0
 #define BAT_DISCHARGE0 GPIOexPIN_22 //GPB1

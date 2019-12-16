@@ -1,3 +1,6 @@
+#ifndef MSGTYPES_H_
+#define MSGTYPES_H_
+
 
 typedef struct __attribute__((packed)) {
     uint8_t opcode;
@@ -75,6 +78,13 @@ typedef struct __attribute__((packed)) {
     uint16_t ADCVal;
 } ETPEGSEADCCmd_t;
 
+typedef struct __attribute__((packed)) {
+    ETPHeader_t header;
+    uint8_t id;
+    uint16_t Val; //depends on the header, can be mode, set or status (null)
+} ETPGPIOCmd_t;
+
+
 typedef enum {
     PSUNum,
     PSUState
@@ -84,6 +94,12 @@ typedef enum {
     ADCNum,
     ADCVal
 } ADCReport_e;
+
+typedef enum {
+    GPIOMode,
+    GPIOWrite,
+    GPIORead
+} ADCGPIO_e;
 
 typedef enum {
     ADC_V1_VAL, ADC_I1_VAL,
@@ -102,12 +118,12 @@ typedef enum {
 } ADCVals_e;
 
 typedef enum {
-    GPIO_1, GPIO_2,
-    GPIO_3, GPIO_4,
-    GPIO_5, GPIO_6,
-    GPIO_7, GPIO_8,
-    GPIO_9, GPIO_10,
-    GPIO_11, GPIO_12, GPIO_13,
+    GPIO_0, GPIO_1,
+    GPIO_2, GPIO_3,
+    GPIO_4, GPIO_5,
+    GPIO_6, GPIO_7,
+    GPIO_8, GPIO_9,
+    GPIO_10, GPIO_11, GPIO_12,
 } GPIOVals_e;
 
 /*===========================*/
@@ -126,7 +142,7 @@ typedef union {
     ETPReply_t etpreply;
     ETPPSUCmd_t etppsu;
     ETPEGSEADCCmd_t etpEGSEAdc;
-    //etpgpio
+    ETPGPIOCmd_t etpgpio;
 
 
     // maximum possible packet size (derived from ax25) + error margin
@@ -139,7 +155,7 @@ typedef union {
     ETPReply_t etpreply;
     ETPPSUCmd_t etppsu;
     ETPEGSEADCCmd_t etpEGSEAdc;
-    //etpgpio
+    ETPGPIOCmd_t etpgpio;
 } ETPUnionHW_t;
 
 
@@ -165,7 +181,7 @@ typedef enum {
     ETPOpcode_PSUSingle = 16,
     ETPOpcode_ADCSingle = 17,
     ETPOpcode_GPIOmode = 18,
-    ETPOpcode_GPIOset = 19,
+    ETPOpcode_GPIOwrite = 19,
     ETPOpcode_GPIOread = 20,
     ETPOpcode_Reply = 21,
 
@@ -178,3 +194,7 @@ typedef enum {
     InvalidPSUVal,
     InvalidADCVal,
 } ETPErrCode_e;
+
+
+
+#endif

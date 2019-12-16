@@ -8,15 +8,15 @@ uint8_t SW_EN_map[6] = {SW_EN1, SW_EN2, SW_EN3, SW_EN4, SW_EN5, SW_EN6};
 
 void PSUcmd(ETPPSUCmd_t * PSUmsg){
     UARTprintf((uint8_t)PSUmsg->id);printf(" to  "); UARTprintf((uint8_t)PSUmsg->state);
-    GPIOexGPIOWrite(1, SW_EN_map[(uint8_t)PSUmsg->id], (uint8_t)PSUmsg->state);
+    GPIOexGPIOWrite(1, SW_EN_map[(uint8_t)PSUmsg->id], !(uint8_t)PSUmsg->state);
 }
 
 
 
 void HandleADCRequest(ETPUnionHW_t * msgin){
     if(LastReadings.ADCs[msgin->etpEGSEAdc.ADCNum] != NULL)
-//        msgin->etpEGSEAdc.ADCVal = LastReadings.ADCs[msgin->etpEGSEAdc.ADCNum];
-        msgin->etpEGSEAdc.ADCVal = 0;
+        msgin->etpEGSEAdc.ADCVal = LastReadings.ADCs[msgin->etpEGSEAdc.ADCNum];
+//        msgin->etpEGSEAdc.ADCVal = 0;
 
 
     //else
@@ -27,24 +27,40 @@ void HandleADCRequest(ETPUnionHW_t * msgin){
 void handleHWMsg(ETPUnion_t * msg){
 
     ETPUnionHW_t hwMSG;
-    hwMSG.header.opcode = &msg->header.opcode;
+    memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
+    //hwMSG.header.opcode = msg->header.opcode;
     UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
     switch (msg->header.opcode) {
         case ETPOpcode_PSUSingle :
             UARTprintf("[EGSE Hardware Task] - Setting PSU");
 //            hwMSG = &msg->etppsu;
-            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
-            PSUcmd(&hwMSG);
+            PSUcmd(&hwMSG.etppsu);
             break;
         case ETPOpcode_ADCSingle :
             UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
-            memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
-            hwMSG.etpEGSEAdc.ADCVal = 0;
-            UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf((uint16_t)hwMSG.etpEGSEAdc.ADCVal);UARTprintf("\n");
+//            hwMSG.etpEGSEAdc.ADCVal = 3;
+            HandleADCRequest(&hwMSG);
+            UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf("%d\n", hwMSG.etpEGSEAdc.ADCVal);
+            UARTprintf("[EGSE Hardware Task] - Got Opcode = "); UARTprintf("%d\n", hwMSG.header.opcode);
             xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
-        default:
+        case ETPOpcode_GPIOmode :
+            UARTprintf("[EGSE Hardware Task] - Setting GPIO Mode\n");
+            GPIOcmd(&hwMSG.etpgpio);
             break;
+        case ETPOpcode_GPIOwrite :
+            UARTprintf("[EGSE Hardware Task] - Writting GPIO Value\n");
+            GPIOcmd(&hwMSG.etpgpio);
+            break;
+        case ETPOpcode_GPIOread :
+            UARTprintf("[EGSE Hardware Task] - Reading GPIO\n");
+            GPIOcmd(&hwMSG.etpgpio);
+            break;
+
+        default:
+            UARTprintf("[EGSE Hardware Task] - No hardware opcode found\n");
+            break;
+
     }
 }
 
