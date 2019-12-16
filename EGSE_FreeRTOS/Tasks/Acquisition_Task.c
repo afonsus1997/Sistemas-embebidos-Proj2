@@ -22,6 +22,8 @@ float conversionMap[26] = {ADC_V1_CONV, ADC_I1_CONV,
                            EXP_ADC3_CONV, EXP_ADC4_CONV,
                            BAT_V_CONV, BAT_I_CONV};
 
+uint8_t ADCvMap[6] = {ADC_V1_VAL, ADC_V2_VAL, ADC_V3_VAL, ADC_V4_VAL, ADC_V5_VAL, ADC_V6_VAL};
+
 void ConvertValues(){
     int i;
     for(i=0; i<26; i++){
@@ -31,7 +33,10 @@ void ConvertValues(){
 
 
 void Railmonitor(){
-
+    uint8_t i;
+    for(i=0; i<6; i++){
+        if(PSUstatus[i] == 0 && LastReadings.ADCs[ADCvMap[i]] < ZERO_THRESHOLD);
+    }
 }
 
 
