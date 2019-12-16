@@ -93,47 +93,50 @@ void handle_EPTMsg(ETPUnion_t * msg){
        }
 
        case ETPOpcode_UART0Data: {
-           UARTprintf("[EGSE Manager Task] - Sending to UART3DATA request from RPI\n");
-           EGSE_sendUART3(msg);
-           break;
+            UARTprintf("[EGSE Manager Task] - Sending to UART3DATA request from RPI\n");
+            EGSE_sendUART3(msg);
+            break;
        }
 
        case ETPOpcode_reset: {
-           UARTprintf("[EGSE Manager Task] - Rebooting TIVA\n");
-           const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-           vTaskDelay(xDelay);
-           HWREG(NVIC_APINT) = NVIC_APINT_VECTKEY | NVIC_APINT_SYSRESETREQ;
-           break;
+            UARTprintf("[EGSE Manager Task] - Rebooting TIVA\n");
+            const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+            vTaskDelay(xDelay);
+            HWREG(NVIC_APINT) = NVIC_APINT_VECTKEY | NVIC_APINT_SYSRESETREQ;
+            break;
        }
 
        case ETPOpcode_PSUSingle: {
-          UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
-          memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
-          xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
-          break;
+            UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
+            memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
+            break;
       }
 
        case ETPOpcode_ADCSingle: {
-          UARTprintf("[EGSE Manager Task] - Got EGSEADCsingle opcode\n");
-          memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
-         xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
-          break;
-      }
+            UARTprintf("[EGSE Manager Task] - Got EGSEADCsingle opcode\n");
+            memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
+            break;
+       }
 
        case ETPOpcode_GPIOread: {
-          UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
-          xQueueSend(g_HardwareTaskQueueToHardware, (void *) msg, portMAX_DELAY);
-          break;
+            UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
+            memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
+            break;
       }
 
        case ETPOpcode_GPIOwrite: {
-            UARTprintf("[EGSE Manager Task] - Got GPIOread opcode\n");
-            //xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+            UARTprintf("[EGSE Manager Task] - Got GPIOwrite opcode\n");
+            memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
             break;
        }
        case ETPOpcode_GPIOmode: {
-            UARTprintf("[EGSE Manager Task] - Got GPIOset opcode\n");
-            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &msg, portMAX_DELAY);
+            UARTprintf("[EGSE Manager Task] - Got GPIOmode opcode\n");
+            memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
+            xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
             break;
     }
 
@@ -148,10 +151,14 @@ void handle_EPTMsg(ETPUnion_t * msg){
 
 
 void HandleHWRX(ETPUnionHW_t * HWmsg){
-    ETPUnion_t toUART;
-
+    ETPUnion_t  toUART;
+    UARTprintf("HWRXopcode: ");UARTprintf("%d\n", HWmsg->header.opcode);
+    UARTprintf("[EGSE Manager Task] - Sending response to RPI\n");
     memcpy(&toUART, HWmsg, sizeof(ETPUnionHW_t));
+    UARTprintf("[EGSE Hardware Task] - Got ADCNum = "); UARTprintf("%d\n", toUART.etpEGSEAdc.ADCNum);
+    UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf("%d\n", toUART.etpEGSEAdc.ADCVal);
     EGSE_sendUARTRPI(&toUART);
+
 
 }
 

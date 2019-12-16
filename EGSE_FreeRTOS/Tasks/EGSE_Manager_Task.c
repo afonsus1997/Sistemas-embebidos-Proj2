@@ -15,9 +15,6 @@ static void vEGSEManagerTask(void *pvParameters){
 
     while(1){
         xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 0);
-//        sUartRcv.header.opcode= ETPOpcode_ADCSingle;
-//        sUartRcv.header.opcode= ETPOpcode_PSUSingle;
-//        sUartRcv.etpEGSEAdc.ADCNum = 1;
         if(xStatusRX == pdTRUE)
             handle_EPTMsg(&sUartRcv);
 

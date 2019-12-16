@@ -1,6 +1,6 @@
 #include "GPIOex.h"
 
-uint8_t GPIOex1PinMap[8] = {GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7};
+uint8_t GPIOex0PinMap[8] = {GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7};
 
 
 //#define psutest
