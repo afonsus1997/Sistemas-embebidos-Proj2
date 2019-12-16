@@ -8,6 +8,34 @@
 
 #include "Acquisition_Task.h"
 
+float conversionMap[26] = {ADC_V1_CONV, ADC_I1_CONV,
+                           ADC_V2_CONV, ADC_I2_CONV,
+                           ADC_V3_CONV, ADC_I3_CONV,
+                           ADC_V4_CONV, ADC_I4_CONV,
+                           ADC_V5_CONV, ADC_I5_CONV,
+                           ADC_V6_CONV, ADC_I6_CONV,
+                           EGSE_ADC1_CONV, EGSE_ADC2_CONV,
+                           EGSE_ADC3_CONV, EGSE_ADC4_CONV,
+                           EGSE_ADC5_CONV, EGSE_ADC6_CONV,
+                           EGSE_ADC7_CONV, EGSE_ADC8_CONV,
+                           EXP_ADC1_CONV, EXP_ADC2_CONV,
+                           EXP_ADC3_CONV, EXP_ADC4_CONV,
+                           BAT_V_CONV, BAT_I_CONV};
+
+void ConvertValues(){
+    int i;
+    for(i=0; i<26; i++){
+        LastReadings.ADCs[i] = RawReadings.ADCs[i] * conversionMap[i];
+    }
+}
+
+
+void Railmonitor(){
+
+}
+
+
+
 
 
 static void vAcquisitionTask(void *pvParameters)
@@ -18,6 +46,8 @@ static void vAcquisitionTask(void *pvParameters)
     while (1)
     {
         ADCreadFIFO();
+        ConvertValues();
+        Railmonitor();
         vTaskDelay( xAcquisitionDelay );
     }
 }
@@ -40,4 +70,5 @@ uint32_t vAcquisitionTaskINIT(void)
     //
     return (0);
 }
+
 

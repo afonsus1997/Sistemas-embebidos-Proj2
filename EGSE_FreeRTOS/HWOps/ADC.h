@@ -26,6 +26,7 @@
 #include "../Funcs/GPIO.h"
 #include "../Tasks/Acquisition_Task.h"
 
+
 #define AMM_CHANNEL 16
 #define AMM_ADC 2
 #define NUM_SSI_DATA 2
@@ -71,6 +72,7 @@ void ADCreadFIFO();
 void ADCwriteAll();
 
 extern LastReadings_t LastReadings;
+
 
 
 #endif /* HWOPS_ADC_H_ */

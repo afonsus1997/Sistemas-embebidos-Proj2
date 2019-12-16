@@ -144,6 +144,8 @@
 #define SPI_MASTER_EGSE GPIO_PIN_4 //PA4
 #define CS2_GPIO_EX     GPIO_PIN_3 //PA3
 
+//===============ADC values===========
+
 
 //=============TIVA_BASES==========
 

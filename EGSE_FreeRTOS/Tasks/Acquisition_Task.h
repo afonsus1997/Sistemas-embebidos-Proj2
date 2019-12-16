@@ -26,16 +26,20 @@
 #include "semphr.h"
 
 #include "../HWOps/HardwareIOConfig.h"
-
+#include "../HWOps/ADCconversion.h"
 
 #define AcquisitionTaskSTACKSIZE        100         // Stack size in words
 
 typedef struct __attribute__((packed)) {
-    uint16_t ADCs[25];
+    float ADCs[26];
     uint8_t GPIO[13];
 
 } LastReadings_t;
 
+LastReadings_t RawReadings;
 LastReadings_t LastReadings;
+
+
+
 
 

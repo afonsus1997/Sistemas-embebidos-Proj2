@@ -9,6 +9,11 @@
 //#define ADCSCANTEST
 uint16_t SPIrxbuf[2];
 
+uint8_t adc0PinMap[15] = {BAT_I, BAT_V, EGSE_ADC1, EGSE_ADC2, EGSE_ADC3, EGSE_ADC4, EGSE_ADC5, EGSE_ADC6, EGSE_ADC7, EGSE_ADC8, ADC_V6_VAL, ADC_I6_VAL, ADC_I4_VAL, ADC_V4_VAL, NULL};
+uint8_t adc1PinMap[15] = {ADC_V2_VAL, ADC_I2_VAL, ADC_V5_VAL, ADC_V3_VAL, ADC_I3_VAL, ADC_V1_VAL, ADC_I1_VAL, NULL, NULL, NULL, EXP_ADC1_VAL, EXP_ADC2_VAL, EXP_ADC3_VAL, EXP_ADC4_VAL, NULL};
+
+
+
 void ADCToggleCS(uint32_t GPIOBASE, uint32_t GPIOPin, uint32_t state){
     if(state){
         while(SSIBusy(SSI2_BASE));
@@ -82,10 +87,10 @@ void ADCreadFIFO(){
     SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
     ADCToggleCS(CS_ADC1_BASE,CS_ADC1,0); //ask for values
 
-    uint8_t i, channel = 0;
+    uint8_t i;
     uint8_t ulindex;
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
-    for(i=0;i<AMM_CHANNEL;i++){
+    for(i=0;i<15;i++){
 
         for(ulindex = 0; ulindex < 2; ulindex++)
         {
@@ -97,9 +102,8 @@ void ADCreadFIFO(){
 
         }
 
-        if(1){ //sets the read value range
-            LastReadings.ADCs[channel] = (SPIrxbuf[0] << 8) | SPIrxbuf[1];
-            channel++;
+        if(adc0PinMap[i] != NULL){ //sets the read value range
+            RawReadings.ADCs[adc0PinMap[i]] = (SPIrxbuf[0] << 8) | SPIrxbuf[1];
         }
 
     }
@@ -118,9 +122,8 @@ void ADCreadFIFO(){
     SysCtlDelay(150 * (SysCtlClockGet() /3 /1000000)); //wait for conversion
     ADCToggleCS(CS_ADC2_BASE,CS_ADC2,0); //ask for values
 
-    //channel = 0;
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
-    for(i=0;i<AMM_CHANNEL;i++){
+    for(i=0;i<15;i++){
 
         for(ulindex = 0; ulindex < 2; ulindex++)
         {
@@ -132,10 +135,11 @@ void ADCreadFIFO(){
 
         }
 
-        if(!(i >= 8 && i<= 10 )){
-            LastReadings.ADCs[channel+14] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
-            channel++;
+        if(adc1PinMap[i] != NULL){
+            RawReadings.ADCs[adc1PinMap[i]] = SPIrxbuf[0] << 8 | SPIrxbuf[1];
         }
+
+
 
         ADCToggleCS(CS_ADC2_BASE,CS_ADC2,1);
 
@@ -144,3 +148,6 @@ void ADCreadFIFO(){
     //update values
 
 }
+
+
+
