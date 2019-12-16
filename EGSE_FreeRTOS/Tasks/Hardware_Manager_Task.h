@@ -37,6 +37,8 @@
 xQueueHandle g_HardwareTaskQueueFromHardware;
 xQueueHandle g_HardwareTaskQueueToHardware;
 
+uint8_t PSUstatus[6] = {1, 1, 1, 1, 1, 1};
+
 extern LastReadings_t LastReadings;
 
 //BaseType_t xHigherPriorityTaskWoken = pdFALSE;

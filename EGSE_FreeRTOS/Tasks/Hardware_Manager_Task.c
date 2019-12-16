@@ -9,6 +9,7 @@ uint8_t SW_EN_map[6] = {SW_EN1, SW_EN2, SW_EN3, SW_EN4, SW_EN5, SW_EN6};
 void PSUcmd(ETPPSUCmd_t * PSUmsg){
     UARTprintf((uint8_t)PSUmsg->id);printf(" to  "); UARTprintf((uint8_t)PSUmsg->state);
     GPIOexGPIOWrite(1, SW_EN_map[(uint8_t)PSUmsg->id], !(uint8_t)PSUmsg->state);
+    PSUstatus[(uint8_t)PSUmsg->id] = !(uint8_t)PSUmsg->state;
 }
 
 

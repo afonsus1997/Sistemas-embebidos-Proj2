@@ -27,8 +27,11 @@
 
 #include "../HWOps/HardwareIOConfig.h"
 #include "../HWOps/ADCconversion.h"
+#include "../ETP/msgtypes.h"
 
 #define AcquisitionTaskSTACKSIZE        100         // Stack size in words
+
+#define ZERO_THRESHOLD 0.1
 
 typedef struct __attribute__((packed)) {
     float ADCs[26];
@@ -38,6 +41,8 @@ typedef struct __attribute__((packed)) {
 
 LastReadings_t RawReadings;
 LastReadings_t LastReadings;
+
+extern uint8_t PSUstatus[6];
 
 
 
