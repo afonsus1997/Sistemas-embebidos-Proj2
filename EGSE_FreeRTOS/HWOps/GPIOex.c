@@ -55,28 +55,30 @@ void GPIOexSendRegSPI(uint8_t exid, uint8_t addr){
 }
 
 uint8_t GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
-    uint8_t i = 3;
+    uint8_t i = 2;
     uint8_t msg[2];
     uint8_t rcv;
     msg[0] = 0b01000001;
     msg[1] = addr;
-
     unsigned char *buff = &msg[0];
+
     if(exid == 0){
         //toggle cs
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
         while(i--);
-            SSIDataPut(SSI1_BASE, buff++);
-        //rcv=Recieve msg (send dummy byte 0xFF);
+            SSIDataPut(SSI1_BASE, *buff++);
+            SSIDataget(SSI1_BASE, &rcv);
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
         return rcv;
     }
-    else if (exid == 1){
+    else if(exid == 1){
         //toggle cs
         GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX_BASE, 0);
         while(i--);
-            SSIDataPut(SSI1_BASE, buff++);
+            SSIDataPut(SSI1_BASE, *buff++);
+            SSIDataGet(SSI1_BASE, &rcv);
         GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX_BASE, 1);
+        return rcv;
     }
 }
 
@@ -92,28 +94,6 @@ uint8_t GPIOexWriteAll(){
     GPIOexSendmsgSPI(2, (uint8_t* )&EXreg[1], EXRegSIZE);
     GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX, 1);
 }
-
-
-
-void GPIOexReadRegister(uint8_t exid, uint8_t addr){
-    if (addr > 21) {
-        return;
-    }
-    else{
-        EXreg[exid][addr] = GPIOexReceiveRegSPI(exid, addr);
-    }
-
-}
-
-void GPIOexWriteRegister(uint8_t exid, uint8_t addr){
-    if (addr > 21) {
-        return;
-    }
-    else{
-        GPIOexReceiveRegSPI(exid, addr);
-    }
-}
-
 
 void GPIOexPinMode(uint8_t exid, uint8_t pin, uint8_t mode){
     if (pin >= 16) {
