@@ -33,15 +33,14 @@ void vHardwareIOInit(){
 }
 
 
-uint8_t GPIOcmd(ETPGPIOCmd_t * msg){
+uint8_t GPIOcmd(ETPUnionHW_t * msg){
     switch(msg->header.opcode){
         case ETPOpcode_GPIOmode :
-            GPIOexPinMode(0, GPIOex0PinMap[msg->id], msg->Val);
+            GPIOexPinMode(0, GPIOex0PinMap[msg->etpgpio.id], msg->etpgpio.Val);
         case ETPOpcode_GPIOwrite :
-            GPIOexGPIOWrite(0, GPIOex0PinMap[msg->id], msg->Val);
+            GPIOexGPIOWrite(0, GPIOex0PinMap[msg->etpgpio.id], msg->etpgpio.Val);
         case ETPOpcode_GPIOread :
-            msg->Val = GPIOexGPIORead(0, GPIOex0PinMap[msg->id]);
-            return 1;
+            msg->etpgpio.Val = GPIOexGPIORead(0, GPIOex0PinMap[msg->etpgpio.id]);
         default:
             break;
         return 0;

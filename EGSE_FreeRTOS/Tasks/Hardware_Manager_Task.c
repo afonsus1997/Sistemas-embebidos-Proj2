@@ -56,6 +56,7 @@ void handleHWMsg(ETPUnion_t * msg){
         case ETPOpcode_GPIOread :
             UARTprintf("[EGSE Hardware Task] - Reading GPIO\n");
             GPIOcmd(&hwMSG.etpgpio);
+            xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
 
         default:

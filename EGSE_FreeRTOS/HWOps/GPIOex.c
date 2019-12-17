@@ -54,8 +54,8 @@ void GPIOexSendRegSPI(uint8_t exid, uint8_t addr){
     }
 }
 
-uint8_t GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
-    uint8_t i = 3;
+void GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
+    uint8_t i = 2;
     uint8_t msg[2];
     uint8_t rcv;
     msg[0] = 0b01000001;
@@ -65,18 +65,21 @@ uint8_t GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
     if(exid == 0){
         //toggle cs
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
-        while(i--);
+        while(i--)
             SSIDataPut(SSI1_BASE, buff++);
-        //rcv=Recieve msg (send dummy byte 0xFF);
+        SSIDataGet(SSI1_BASE, &rcv);
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
-        return rcv;
+        EXreg[exid][addr] = rcv;
+
     }
     else if (exid == 1){
         //toggle cs
         GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX_BASE, 0);
-        while(i--);
+        while(i--)
             SSIDataPut(SSI1_BASE, buff++);
+        SSIDataGet(SSI1_BASE, &rcv);
         GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX_BASE, 1);
+        EXreg[exid][addr] = rcv;
     }
 }
 
@@ -100,7 +103,7 @@ void GPIOexReadRegister(uint8_t exid, uint8_t addr){
         return;
     }
     else{
-        EXreg[exid][addr] = GPIOexReceiveRegSPI(exid, addr);
+        GPIOexReceiveRegSPI(exid, addr);
     }
 
 }
@@ -192,19 +195,23 @@ uint8_t GPIOexGPIORead(uint8_t exid, uint8_t pin){
         return;
     }
     uint8_t dirReg = IODIRA;
-    uint8_t puReg = GPPUA;
+    uint8_t portReg = GPIOA;
     uint8_t latReg = OLATA;
     if (pin >= 8) {
         pin -= 8;
         dirReg = IODIRB;
-        puReg = GPPUB;
+        portReg = GPIOB;
         latReg = OLATB;
     }
 
     uint8_t mode = (EXreg[exid][dirReg] & (1<<pin)) == 0 ? OUTPUT : INPUT;
-
-
-
+    switch(mode){
+        case OUTPUT:
+            return EXreg[exid][latReg];
+        case INPUT:
+            GPIOexReceiveRegSPI(exid, portReg);
+            return EXreg[exid][portReg];
+    }
     return 1;
 
 }
