@@ -14,7 +14,7 @@ static void vEGSEManagerTask(void *pvParameters){
     portBASE_TYPE xStatusTX;
 
     while(1){
-//        UARTprintf("[Manager Task] - Checking Queues\n");
+        UARTprintf("[Manager Task] - Checking Queues\n");
         xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 10);
         if(xStatusRX == pdTRUE)
             handle_EPTMsg(&sUartRcv);

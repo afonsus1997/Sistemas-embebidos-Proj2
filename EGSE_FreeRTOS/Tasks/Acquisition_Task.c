@@ -54,7 +54,7 @@ static void vAcquisitionTask(void *pvParameters)
         ADCreadFIFO();
         ConvertValues();
 //        Railmonitor();
-//        vTaskDelay( xAcquisitionDelay );
+        vTaskDelay( 100 );
         taskYIELD();
 
     }

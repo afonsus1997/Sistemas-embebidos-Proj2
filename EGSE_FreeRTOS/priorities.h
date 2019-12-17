@@ -32,7 +32,7 @@
 //*****************************************************************************
 #define PRIORITY_SWITCH_TASK        1
 #define PRIORITY_LED_TASK           1
-#define PRIORITY_UartRPI_TASK       1
+#define PRIORITY_UartRPI_TASK       5
 #define PRIORITY_I2C_RPI_TASK       1
 #define PRIORITY_EGSE_MANAGER_TASK  4
 #define PRIORITY_HARDWARE_TASK      5

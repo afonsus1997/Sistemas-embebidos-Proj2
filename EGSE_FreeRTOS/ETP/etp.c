@@ -157,8 +157,7 @@ void HandleHWRX(ETPUnionHW_t * HWmsg){
     UARTprintf("HWRXopcode: ");UARTprintf("%d\n", HWmsg->header.opcode);
     UARTprintf("[EGSE Manager Task] - Sending response to RPI\n");
     memcpy(&toUART, HWmsg, sizeof(ETPUnionHW_t));
-    UARTprintf("[EGSE Hardware Task] - Got ADCNum = "); UARTprintf("%d\n", toUART.etpEGSEAdc.ADCNum);
-    UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf("%d\n", toUART.etpEGSEAdc.ADCVal);
+    UARTprintf("[EGSE Hardware Task] - Got GPIOread = "); UARTprintf("%d\n", toUART.etpgpio.Val);
     EGSE_sendUARTRPI(&toUART);
 
 

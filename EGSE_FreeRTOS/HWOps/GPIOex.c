@@ -210,6 +210,7 @@ uint8_t GPIOexGPIORead(uint8_t exid, uint8_t pin){
             return EXreg[exid][latReg];
         case INPUT:
             GPIOexReceiveRegSPI(exid, portReg);
+            UARTprintf("Read GPIO %d\n", EXreg[exid][portReg]);
             return EXreg[exid][portReg];
     }
     return 1;

@@ -93,7 +93,7 @@ void ADCreadFIFO(){
     for(i=0;i<15;i++){
 
 
-        /*
+
         SSIDataPut(SSI2_BASE, 0);
         //ADCwriteRegister(0, 0);
         while(SSIBusy(SSI2_BASE));
@@ -105,7 +105,7 @@ void ADCreadFIFO(){
         while(SSIBusy(SSI2_BASE));
         while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
         while(SSIBusy(SSI2_BASE)){}
-        */
+
 
 
         if(adc0PinMap[i] != NULL){ //sets the read value range
@@ -131,7 +131,7 @@ void ADCreadFIFO(){
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<15;i++){
 
-        /*
+
         SSIDataPut(SSI2_BASE, 0);
         //ADCwriteRegister(0, 0);
         while(SSIBusy(SSI2_BASE));
@@ -143,7 +143,7 @@ void ADCreadFIFO(){
         while(SSIBusy(SSI2_BASE));
         while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
         while(SSIBusy(SSI2_BASE)){}
-        */
+
 
 
         if(adc1PinMap[i] != NULL){
@@ -156,7 +156,6 @@ void ADCreadFIFO(){
 
     }
 
-    //update values
 
 }
 

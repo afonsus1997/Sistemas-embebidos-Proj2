@@ -20,7 +20,7 @@
 #include "../ETP/msgtypes.h"
 
 
-#define UartRPITASKSTACKSIZE        600         // Stack size in words
+#define UartRPITASKSTACKSIZE        500         // Stack size in words
 
 #ifdef USBDEBUG
     #define DEBUG_UARTBASE 0
