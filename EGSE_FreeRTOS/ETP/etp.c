@@ -34,15 +34,17 @@ void EGSE_sendPong(ETPUnion_t *msg) {
 
 
 void handle_EPTMsg(ETPUnion_t * msg){
-    ETPHeader_t *header = &msg->header;
+    //ETPHeader_t * header = &msg->header;
+    //while(1);
     ETPUnion_t * msgtemp;
     ETPUnionHW_t hwmsg;
 
 
-    //UARTprintf("[EGSE Manager Task] - Got Opcode");
-    //UARTprintf("%s\n", header->opcode);
 
-    switch(header->opcode){
+    UARTprintf("[EGSE Manager Task] - Got Opcode");
+    //UARTprintf("%d\n", msg->header.opcode);
+
+    switch(msg->header.opcode){
         case ETPOpcode_Sync: {
             UARTprintf("[EGSE Manager Task] - Got sync request from RPI\n");
             EGSE_ready = true;

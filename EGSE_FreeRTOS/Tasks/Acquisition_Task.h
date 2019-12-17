@@ -29,9 +29,9 @@
 #include "../HWOps/ADCconversion.h"
 #include "../ETP/msgtypes.h"
 
-#define AcquisitionTaskSTACKSIZE        100         // Stack size in words
+#define AcquisitionTaskSTACKSIZE        750         // Stack size in words
 
-#define ZERO_THRESHOLD 0.1
+#define ZERO_THRESHOLD 1
 
 typedef struct __attribute__((packed)) {
     float ADCs[26];

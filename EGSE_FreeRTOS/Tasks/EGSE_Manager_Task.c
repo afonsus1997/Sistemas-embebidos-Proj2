@@ -14,15 +14,17 @@ static void vEGSEManagerTask(void *pvParameters){
     portBASE_TYPE xStatusTX;
 
     while(1){
-        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 0);
+        UARTprintf("[Manager Task] - Checking Queues\n");
+        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 10);
         if(xStatusRX == pdTRUE)
             handle_EPTMsg(&sUartRcv);
 
 
         //check if theres hw messages to send back to uart
-        xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 0);
+        xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 10);
         if(xStatusTX == pdTRUE)
             HandleHWRX(&sHWRcv);
+        taskYIELD();
     }
 
 }

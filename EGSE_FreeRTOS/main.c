@@ -79,19 +79,6 @@ int main(void)
 
 
     IntMasterEnable();
-
-    //
-    // Create the LED task.
-    //
-    //if(LEDTaskInit() != 0)
-    //    for(;;);
-
-    //
-    // Create the switch task.
-    //
-    //if(SwitchTaskInit() != 0)
-    //    for(;;);
-
     //
     // Start the scheduler.  This should not return.
     //

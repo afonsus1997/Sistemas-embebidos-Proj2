@@ -92,15 +92,21 @@ void ADCreadFIFO(){
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<15;i++){
 
-        for(ulindex = 0; ulindex < 2; ulindex++)
-        {
-            SSIDataPut(SSI2_BASE, 0);
-            //ADCwriteRegister(0, 0);
-            while(SSIBusy(SSI2_BASE));
-            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
-            while(SSIBusy(SSI2_BASE)){}
 
-        }
+        /*
+        SSIDataPut(SSI2_BASE, 0);
+        //ADCwriteRegister(0, 0);
+        while(SSIBusy(SSI2_BASE));
+        while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+        while(SSIBusy(SSI2_BASE)){}
+
+        SSIDataPut(SSI2_BASE, 0);
+        //ADCwriteRegister(0, 0);
+        while(SSIBusy(SSI2_BASE));
+        while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+        while(SSIBusy(SSI2_BASE)){}
+        */
+
 
         if(adc0PinMap[i] != NULL){ //sets the read value range
             RawReadings.ADCs[adc0PinMap[i]] = (SPIrxbuf[0] << 8) | SPIrxbuf[1];
@@ -125,15 +131,20 @@ void ADCreadFIFO(){
     while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[0])); //clean fifo garbage
     for(i=0;i<15;i++){
 
-        for(ulindex = 0; ulindex < 2; ulindex++)
-        {
-            SSIDataPut(SSI2_BASE, 0);
-            //ADCwriteRegister(0, 0);
-            while(SSIBusy(SSI2_BASE));
-            while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
-            while(SSIBusy(SSI2_BASE)){}
+        /*
+        SSIDataPut(SSI2_BASE, 0);
+        //ADCwriteRegister(0, 0);
+        while(SSIBusy(SSI2_BASE));
+        while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+        while(SSIBusy(SSI2_BASE)){}
 
-        }
+        SSIDataPut(SSI2_BASE, 0);
+        //ADCwriteRegister(0, 0);
+        while(SSIBusy(SSI2_BASE));
+        while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+        while(SSIBusy(SSI2_BASE)){}
+        */
+
 
         if(adc1PinMap[i] != NULL){
             RawReadings.ADCs[adc1PinMap[i]] = SPIrxbuf[0] << 8 | SPIrxbuf[1];

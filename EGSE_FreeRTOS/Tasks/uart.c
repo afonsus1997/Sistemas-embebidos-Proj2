@@ -23,9 +23,12 @@ void EGSE_sendUART3(ETPUnion_t *msg){
 
 static void vUartRPITask(void *pvParameters){
     while(1){
+
         xSemaphoreTake( xsUARTin, portMAX_DELAY  );
 
-            //semaphore released
+        UARTprintf("[UART Task] - Got Semaphore\n");
+
+        //semaphore released
             //uartmsg_t msg = {.rxIdxWrite = 0, .rxIdxWrite = 0, .rxSize = 0};// = uartmsg; //pointer to msg structure
             ETPUnion_t msg;
             int16_t idx = 0;
@@ -52,13 +55,16 @@ void UARTInt0Handler(void)
 {
     uint32_t ui32Status;
     ui32Status = ROM_UARTIntStatus(UART0_BASE, true);
-
+    UARTprintf("[UART ISR] - Got interrupt\n");
     ROM_UARTIntClear(UART0_BASE, ui32Status);
+
+    static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
-    if(xHigherPriorityTaskWoken == pdTRUE)
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    //if(xHigherPriorityTaskWoken == pdTRUE)
+        //portYIELD_FROM_ISR(pdFALSE);
+    //portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
 
 
@@ -117,7 +123,7 @@ uint32_t UartRPITaskInit(void)
     UARTIntRegister(UART0_BASE, &UARTInt0Handler);
 
     xsUARTin = xSemaphoreCreateBinary();
-
+//    xsUARTin = xSemaphoreCreateMutex();
     if(xTaskCreate(vUartRPITask, (const portCHAR *)"UartRPI", UartRPITASKSTACKSIZE, NULL,
                    tskIDLE_PRIORITY + PRIORITY_I2C_RPI_TASK , NULL) != pdTRUE)
     {

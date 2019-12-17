@@ -71,6 +71,7 @@ static void vHardwareManagerTask(void *pvParameters)
 {
     while (1)
     {
+        UARTprintf("[Hardware Task] - Checking Queue\n");
         xQueueReceive(g_HardwareTaskQueueToHardware, &hwMSG, portMAX_DELAY);
         handleHWMsg(&hwMSG);
     }
