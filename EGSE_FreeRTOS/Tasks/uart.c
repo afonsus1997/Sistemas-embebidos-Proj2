@@ -26,8 +26,8 @@ static void vUartRPITask(void *pvParameters){
 
         xSemaphoreTake( xsUARTin, portMAX_DELAY  );
 
-        UARTprintf("[UART Task] - Got Semaphore\n");
-
+//        UARTprintf("[UART Task] - Got Semaphore\n");
+            taskENTER_CRITICAL();
         //semaphore released
             //uartmsg_t msg = {.rxIdxWrite = 0, .rxIdxWrite = 0, .rxSize = 0};// = uartmsg; //pointer to msg structure
             ETPUnion_t msg;
@@ -44,7 +44,7 @@ static void vUartRPITask(void *pvParameters){
 
             //UARTprintf("[UART Task] - Sent Message to UART queue\n");
             xQueueSend(g_pUartRPIQueue, (void *) &msg, portMAX_DELAY);
-
+            taskEXIT_CRITICAL();
 
     }
 
@@ -55,7 +55,7 @@ void UARTInt0Handler(void)
 {
     uint32_t ui32Status;
     ui32Status = ROM_UARTIntStatus(UART0_BASE, true);
-    UARTprintf("[UART ISR] - Got interrupt\n");
+//    UARTprintf("[UART ISR] - Got interrupt\n");
     ROM_UARTIntClear(UART0_BASE, ui32Status);
 
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;

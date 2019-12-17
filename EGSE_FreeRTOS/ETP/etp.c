@@ -41,7 +41,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
 
 
 
-    UARTprintf("[EGSE Manager Task] - Got Opcode");
+//    UARTprintf("[EGSE Manager Task] - Got Opcode");
     //UARTprintf("%d\n", msg->header.opcode);
 
     switch(msg->header.opcode){
@@ -73,7 +73,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
             break;
        }
         case ETPOpcode_KeepAlive: {
-            UARTprintf("[EGSE Manager Task] - Got Keep Alive request from RPI\n");
+//            UARTprintf("[EGSE Manager Task] - Got Keep Alive request from RPI\n");
             EGSE_newKeepAlive(msgtemp);
             EGSE_sendUARTRPI(msgtemp);
             break;
@@ -109,7 +109,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
        }
 
        case ETPOpcode_PSUSingle: {
-            UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
+//            UARTprintf("[EGSE Manager Task] - Got PSUSET opcode\n");
             memcpy(&hwmsg, msg, sizeof(ETPUnionHW_t));
             xQueueSend(g_HardwareTaskQueueToHardware, (void *) &hwmsg, portMAX_DELAY);
             break;

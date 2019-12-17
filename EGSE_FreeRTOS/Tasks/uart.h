@@ -30,7 +30,7 @@
 #endif
 
 #define UartRPI_ITEM_SIZE           sizeof(ETPUnion_t)
-#define UartRPI_QUEUE_SIZE          5
+#define UartRPI_QUEUE_SIZE          10
 
 xQueueHandle g_pUartRPIQueue;
 //extern xQueueHandle g_pLEDQueue;

@@ -30,10 +30,10 @@ void handleHWMsg(ETPUnion_t * msg){
     ETPUnionHW_t hwMSG;
     memcpy(&hwMSG, msg, sizeof(ETPUnionHW_t));
     //hwMSG.header.opcode = msg->header.opcode;
-    UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
+//    UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
     switch (msg->header.opcode) {
         case ETPOpcode_PSUSingle :
-            UARTprintf("[EGSE Hardware Task] - Setting PSU");
+            //UARTprintf("[EGSE Hardware Task] - Setting PSU");
 //            hwMSG = &msg->etppsu;
             PSUcmd(&hwMSG.etppsu);
             break;
@@ -41,8 +41,8 @@ void handleHWMsg(ETPUnion_t * msg){
             UARTprintf("[EGSE Hardware Task] - Getting ADC Value\n");
 //            hwMSG.etpEGSEAdc.ADCVal = 3;
             HandleADCRequest(&hwMSG);
-            UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf("%d\n", hwMSG.etpEGSEAdc.ADCVal);
-            UARTprintf("[EGSE Hardware Task] - Got Opcode = "); UARTprintf("%d\n", hwMSG.header.opcode);
+            //UARTprintf("[EGSE Hardware Task] - Got ADCVal = "); UARTprintf("%d\n", hwMSG.etpEGSEAdc.ADCVal);
+            //UARTprintf("[EGSE Hardware Task] - Got Opcode = "); UARTprintf("%d\n", hwMSG.header.opcode);
             xQueueSend(g_HardwareTaskQueueFromHardware, (void *) &hwMSG, portMAX_DELAY);
             break;
         case ETPOpcode_GPIOmode :
@@ -71,7 +71,7 @@ static void vHardwareManagerTask(void *pvParameters)
 {
     while (1)
     {
-        UARTprintf("[Hardware Task] - Checking Queue\n");
+//        UARTprintf("[Hardware Task] - Checking Queue\n");
         xQueueReceive(g_HardwareTaskQueueToHardware, &hwMSG, portMAX_DELAY);
         handleHWMsg(&hwMSG);
     }
