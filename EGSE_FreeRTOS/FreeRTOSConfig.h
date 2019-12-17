@@ -73,7 +73,7 @@
 #define configTICK_RATE_HZ                  ( ( portTickType ) 1000 )
 #define configMINIMAL_STACK_SIZE            ( ( unsigned short ) 200 )
 //#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 30000 ) )
-#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 15000 ) )
+#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 25000 ) )
 #define configMAX_TASK_NAME_LEN             ( 12 )
 #define configUSE_TRACE_FACILITY            1
 #define configUSE_16_BIT_TICKS              0
@@ -104,7 +104,7 @@ to exclude the API function. */
  */
 #define configKERNEL_INTERRUPT_PRIORITY         255//( 7 << 5 )    /* Priority 7, or 0xE0 as only the top three bits are implemented.  This is the lowest priority. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY     ( 5 << 5 )  /* Priority 5, or 0xA0 as only the top three bits are implemented. */
-
+//#define configMAX_SYSCALL_INTERRUPT_PRIORITY 0x10
 #endif /* FREERTOS_CONFIG_H */
 
 

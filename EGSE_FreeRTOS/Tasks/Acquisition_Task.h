@@ -29,7 +29,7 @@
 #include "../HWOps/ADCconversion.h"
 #include "../ETP/msgtypes.h"
 
-#define AcquisitionTaskSTACKSIZE        100         // Stack size in words
+#define AcquisitionTaskSTACKSIZE        400         // Stack size in words
 
 #define ZERO_THRESHOLD 0.1
 

@@ -24,7 +24,7 @@ void EGSE_sendUART3(ETPUnion_t *msg){
 static void vUartRPITask(void *pvParameters){
     while(1){
         xSemaphoreTake( xsUARTin, portMAX_DELAY  );
-
+//        UARTprintf("[EGSE Hardware Task] - Got uart interrupt\n");
             //semaphore released
             //uartmsg_t msg = {.rxIdxWrite = 0, .rxIdxWrite = 0, .rxSize = 0};// = uartmsg; //pointer to msg structure
             ETPUnion_t msg;
@@ -55,10 +55,15 @@ void UARTInt0Handler(void)
 
     ROM_UARTIntClear(UART0_BASE, ui32Status);
 
+    ui32Status = UARTIntStatus(UART0_BASE, true);
+
+    UARTIntClear(UART0_BASE, ui32Status);
+
+
     xSemaphoreGiveFromISR( xsUARTin, &xHigherPriorityTaskWoken );
 
-    if(xHigherPriorityTaskWoken == pdTRUE)
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    //if(xHigherPriorityTaskWoken == pdTRUE)
+        //portYIELD_FROM_ISR(pdFALSE);
 }
 
 
@@ -107,7 +112,6 @@ uint32_t UartRPITaskInit(void)
     //for(;;)
     UARTprintf("\n\n[UART Task] - UART Initialization!\n");
 
-    //UARTStdioConfig(3, 115200, 16000000);
 
     IntEnable(INT_UART0);
     //IntEnable(INT_UART3);

@@ -4,7 +4,8 @@ static void vEGSEManagerTask(void *pvParameters){
 
     //uartmsg_t sUartRcv;
 
-    ETPUnion_t sUartRcv ;
+    ETPUnion_t* sUartRcv ;
+
     ETPUnionHW_t sHWRcv;
 //    ETPUnion_t * test;
 
@@ -14,15 +15,17 @@ static void vEGSEManagerTask(void *pvParameters){
     portBASE_TYPE xStatusTX;
 
     while(1){
-        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 0);
+//        UARTprintf("[EGSE Manager Task] - Checking queues...\n");
+        xStatusRX = xQueueReceive(g_pUartRPIQueue, &sUartRcv, 10);
         if(xStatusRX == pdTRUE)
             handle_EPTMsg(&sUartRcv);
 
 
         //check if theres hw messages to send back to uart
-        xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 0);
+        xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 10);
         if(xStatusTX == pdTRUE)
             HandleHWRX(&sHWRcv);
+        taskYIELD();
     }
 
 }

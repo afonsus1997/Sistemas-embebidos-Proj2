@@ -71,7 +71,7 @@ void handle_EPTMsg(ETPUnion_t * msg){
             break;
        }
         case ETPOpcode_KeepAlive: {
-            UARTprintf("[EGSE Manager Task] - Got Keep Alive request from RPI\n");
+//            UARTprintf("[EGSE Manager Task] - Got Keep Alive request from RPI\n");
             EGSE_newKeepAlive(msgtemp);
             EGSE_sendUARTRPI(msgtemp);
             break;

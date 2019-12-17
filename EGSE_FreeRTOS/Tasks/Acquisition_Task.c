@@ -46,14 +46,26 @@ void Railmonitor(){
 static void vAcquisitionTask(void *pvParameters)
 {
 
-    const TickType_t xAcquisitionDelay = 250 / portTICK_PERIOD_MS;
-
+    //const TickType_t xAcquisitionDelay = 500 / portTICK_PERIOD_MS;
+    const TickType_t xAcquisitionDelay = 2000;
+    TickType_t last = xTaskGetTickCount();
     while (1)
     {
-        ADCreadFIFO();
-        ConvertValues();
-        Railmonitor();
-        vTaskDelay( xAcquisitionDelay );
+//        UARTprintf("[Aqcuisition Task] - checking time...\n");
+
+        while((xTaskGetTickCount() - last) > pdMS_TO_TICKS(500))
+        {
+//            UARTprintf("[Aqcuisition Task] - Reading adcs...\n");
+            ADCreadFIFO();
+            ConvertValues();
+            //        Railmonitor();
+            //        vTaskDelay( xAcquisitionDelay );
+            last = xTaskGetTickCount();
+
+
+        }
+        vTaskDelay(pdMS_TO_TICKS(500));
+
     }
 }
 

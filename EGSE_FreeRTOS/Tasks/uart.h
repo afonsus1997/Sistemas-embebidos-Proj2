@@ -20,7 +20,7 @@
 #include "../ETP/msgtypes.h"
 
 
-#define UartRPITASKSTACKSIZE        1000         // Stack size in words
+#define UartRPITASKSTACKSIZE        500         // Stack size in words
 
 #ifdef USBDEBUG
     #define DEBUG_UARTBASE 0
@@ -29,7 +29,7 @@
     #define DEBUG_UARTBASE 3
 #endif
 
-#define UartRPI_ITEM_SIZE           sizeof(ETPUnion_t)
+#define UartRPI_ITEM_SIZE           sizeof(ETPUnion_t*)
 #define UartRPI_QUEUE_SIZE          5
 
 xQueueHandle g_pUartRPIQueue;
@@ -37,7 +37,7 @@ xQueueHandle g_pUartRPIQueue;
 
 SemaphoreHandle_t xsUARTin;
 
-BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+BaseType_t xHigherPriorityTaskWoken = pdTRUE;
 
 uint32_t UartRPITaskInit(void);
 
