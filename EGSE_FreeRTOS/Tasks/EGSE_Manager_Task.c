@@ -24,7 +24,9 @@ static void vEGSEManagerTask(void *pvParameters){
         xStatusTX = xQueueReceive(g_HardwareTaskQueueFromHardware, &sHWRcv, 10);
         if(xStatusTX == pdTRUE)
             HandleHWRX(&sHWRcv);
-        taskYIELD();
+//        taskYIELD();
+        vTaskDelay( 20 );
+
     }
 
 }

@@ -27,7 +27,7 @@ uint8_t ADCvMap[6] = {ADC_V1_VAL, ADC_V2_VAL, ADC_V3_VAL, ADC_V4_VAL, ADC_V5_VAL
 void ConvertValues(){
     int i;
     for(i=0; i<26; i++){
-        LastReadings.ADCs[i] = RawReadings.ADCs[i] * conversionMap[i];
+        LastReadings.ADCs[i] = ((float)RawReadings.ADCs[i] * conversionMap[i])/100;
     }
 }
 
@@ -55,7 +55,7 @@ static void vAcquisitionTask(void *pvParameters)
         ConvertValues();
 //        Railmonitor();
         vTaskDelay( 100 );
-        taskYIELD();
+//        taskYIELD();
 
     }
 }
