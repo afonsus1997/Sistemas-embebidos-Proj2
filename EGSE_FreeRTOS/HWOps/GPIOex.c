@@ -55,19 +55,29 @@ void GPIOexSendRegSPI(uint8_t exid, uint8_t addr){
 }
 
 void GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
-    uint8_t i = 2;
-    uint8_t msg[2];
+    uint8_t i = 3;
+    uint8_t msg[3];
     uint8_t rcv;
     msg[0] = 0b01000001;
     msg[1] = addr;
+    msg[2] = 0b00000000;
+
+    /*SSIDataPut(SSI2_BASE, 0);
+    while(SSIBusy(SSI2_BASE));
+    while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
+    while(SSIBusy(SSI2_BASE)){}*/
 
     unsigned char *buff = &msg[0];
     if(exid == 0){
         //toggle cs
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
-        while(i--)
+        while(i--){
             SSIDataPut(SSI1_BASE, buff++);
-        SSIDataGet(SSI1_BASE, &rcv);
+            while(SSIBusy(SSI1_BASE));
+        }
+        SSIDataGetNonBlocking(SSI1_BASE, &rcv);
+        //SSIDataGet(SSI1_BASE, &rcv);
+        UARTprintf("SPI DataGet %d\n", rcv);
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
         EXreg[exid][addr] = rcv;
 
@@ -152,6 +162,7 @@ void GPIOexPinMode(uint8_t exid, uint8_t pin, uint8_t mode){
 
 
 void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value){
+
     if (pin >= 16) {
         return;
     }
@@ -165,7 +176,11 @@ void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value){
         latReg = OLATB;
     }
 
-    uint8_t mode = (EXreg[exid][dirReg] & (1<<pin)) == 0 ? OUTPUT : INPUT;
+
+    uint8_t mode = ((EXreg[exid][dirReg] & (1<<pin)) == 0) ? OUTPUT : INPUT;
+
+    UARTprintf("Pin: %d, Value: %d, Mode: %d\n", pin, value, mode);
+
 
     switch (mode) {
         case OUTPUT:
@@ -175,16 +190,17 @@ void GPIOexGPIOWrite(uint8_t exid, uint8_t pin, uint8_t value){
                 EXreg[exid][latReg] |= (1<<pin);
             }
             GPIOexSendRegSPI(exid, latReg);
+            UARTprintf("Latreg: %d\n", EXreg[exid][latReg]);
             break;
 
-        case INPUT:
+        /*case INPUT:
             if (value == 0) {
                 EXreg[exid][puReg] &= ~(1<<pin);
             } else {
                 EXreg[exid][puReg] |= (1<<pin);
             }
             GPIOexSendRegSPI(exid, puReg);
-            break;
+            break;*/
     }
 
 
@@ -204,14 +220,16 @@ uint8_t GPIOexGPIORead(uint8_t exid, uint8_t pin){
         latReg = OLATB;
     }
 
-    uint8_t mode = (EXreg[exid][dirReg] & (1<<pin)) == 0 ? OUTPUT : INPUT;
+    uint8_t mode = ((EXreg[exid][dirReg] & (1<<pin)) == 0) ? OUTPUT : INPUT;
+    UARTprintf("Pin: %d, Mode: %d\n", pin, mode);
+
     switch(mode){
         case OUTPUT:
-            return EXreg[exid][latReg];
+            UARTprintf("Latreg: %d\n", EXreg[exid][latReg]);
+            return ((EXreg[exid][latReg] & (1<<pin)) == 0) ? 0 : 1;
         case INPUT:
             GPIOexReceiveRegSPI(exid, portReg);
-            UARTprintf("Read GPIO %d\n", EXreg[exid][portReg]);
-            return EXreg[exid][portReg];
+            return ((EXreg[exid][portReg] & (1<<pin)) == 0) ? 0 : 1;
     }
     return 1;
 
