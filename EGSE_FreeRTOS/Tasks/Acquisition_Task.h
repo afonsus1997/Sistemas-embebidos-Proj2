@@ -34,7 +34,8 @@
 #define ZERO_THRESHOLD 1
 
 typedef struct __attribute__((packed)) {
-    float ADCs[26];
+    uint16_t ADCs[26];
+//    uint16_t ADCs[32];
     uint8_t GPIO[13];
 
 } LastReadings_t;

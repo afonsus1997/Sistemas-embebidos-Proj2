@@ -55,7 +55,7 @@ void UARTInt0Handler(void)
 {
     uint32_t ui32Status;
     ui32Status = ROM_UARTIntStatus(UART0_BASE, true);
-    UARTprintf("[UART ISR] - Got interrupt\n");
+    //UARTprintf("[UART ISR] - Got interrupt\n");
     ROM_UARTIntClear(UART0_BASE, ui32Status);
 
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;

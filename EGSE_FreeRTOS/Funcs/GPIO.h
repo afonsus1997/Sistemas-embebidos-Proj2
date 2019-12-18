@@ -20,7 +20,7 @@
 
 void vHardwareIOInit();
 
-uint8_t GPIOcmd(ETPUnionHW_t * msg);
+uint8_t GPIOcmd(ETPGPIOCmd_t * msg);
 
 extern uint8_t GPIOex0PinMap[8];
 

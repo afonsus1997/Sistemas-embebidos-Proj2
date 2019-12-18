@@ -32,7 +32,7 @@ void SPIinit(){
     SSIConfigSetExpClk(SSI3_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 1000000, 8);
 
-    SSIConfigSetExpClk(SSI1_BASE, 16000000, SSI_FRF_MOTO_MODE_0,
+    SSIConfigSetExpClk(SSI1_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                            SSI_MODE_MASTER, 500000, 8);
 
     SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
@@ -43,4 +43,8 @@ void SPIinit(){
     SSIEnable(SSI1_BASE);
     SSIEnable(SSI2_BASE);
     SSIEnable(SSI3_BASE);
+
+    ROM_GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0);
+
+
 }

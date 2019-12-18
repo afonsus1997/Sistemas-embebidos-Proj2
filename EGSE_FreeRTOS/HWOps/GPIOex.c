@@ -55,19 +55,38 @@ void GPIOexSendRegSPI(uint8_t exid, uint8_t addr){
 }
 
 void GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
-    uint8_t i = 3;
-    uint8_t msg[3];
+    uint8_t i = 2;
+    uint8_t msg[2];
     uint8_t rcv;
     msg[0] = 0b01000001;
     msg[1] = addr;
     msg[2] = 0b00000000;
-
-    /*SSIDataPut(SSI2_BASE, 0);
-    while(SSIBusy(SSI2_BASE));
-    while(SSIDataGetNonBlocking(SSI2_BASE, &SPIrxbuf[ulindex]));
-    while(SSIBusy(SSI2_BASE)){}*/
-
     unsigned char *buff = &msg[0];
+
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
+    SSIDataPut(SSI1_BASE, buff++);
+    while(SSIBusy(SSI1_BASE));
+    SSIDataPut(SSI1_BASE, buff++);
+    while(SSIBusy(SSI1_BASE));
+    SSIDataPut(SSI1_BASE, buff);
+    while(SSIBusy(SSI1_BASE));
+    SSIDataGet(SSI1_BASE, &rcv);
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
+    EXreg[exid][addr] = rcv;
+    UARTprintf("SPI DataGet %d\n", rcv);
+
+    /*GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
+    SSIDataPut(SSI1_BASE, buff++);
+    while(SSIBusy(SSI1_BASE));
+    SSIDataPut(SSI1_BASE, buff);
+    while(SSIBusy(SSI1_BASE));
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
+    SSIDataGet(SSI1_BASE, &rcv);
+    GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);*/
+
+
+   /* unsigned char *buff = &msg[0];
     if(exid == 0){
         //toggle cs
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 0);
@@ -75,12 +94,11 @@ void GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
             SSIDataPut(SSI1_BASE, buff++);
             while(SSIBusy(SSI1_BASE));
         }
-        SSIDataGetNonBlocking(SSI1_BASE, &rcv);
-        //SSIDataGet(SSI1_BASE, &rcv);
-        UARTprintf("SPI DataGet %d\n", rcv);
+        SSIDataGet(SSI1_BASE, &rcv);
+        while(SSIBusy(SSI1_BASE));
         GPIOexToggleCS(CS1_GPIO_EX_BASE, CS1_GPIO_EX, 1);
         EXreg[exid][addr] = rcv;
-
+        UARTprintf("SPI DataGet %d\n", rcv);
     }
     else if (exid == 1){
         //toggle cs
@@ -90,7 +108,7 @@ void GPIOexReceiveRegSPI(uint8_t exid, uint8_t addr){
         SSIDataGet(SSI1_BASE, &rcv);
         GPIOexToggleCS(CS2_GPIO_EX_BASE, CS2_GPIO_EX_BASE, 1);
         EXreg[exid][addr] = rcv;
-    }
+    }*/
 }
 
 uint8_t GPIOexWriteAll(){
