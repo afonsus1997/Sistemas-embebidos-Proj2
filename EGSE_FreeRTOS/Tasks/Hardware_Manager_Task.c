@@ -33,7 +33,7 @@ void handleHWMsg(ETPUnion_t * msg){
 //    UARTprintf("[EGSE Hardware Task] - Handling Hardware\n");
     switch (msg->header.opcode) {
         case ETPOpcode_PSUSingle :
-            //UARTprintf("[EGSE Hardware Task] - Setting PSU");
+            UARTprintf("[EGSE Hardware Task] - Setting PSU");
 //            hwMSG = &msg->etppsu;
             PSUcmd(&hwMSG.etppsu);
             break;

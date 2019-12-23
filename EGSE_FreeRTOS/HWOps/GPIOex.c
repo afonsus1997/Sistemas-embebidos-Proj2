@@ -332,6 +332,15 @@ void GPIOexBegin(){
     GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, 1);
     GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, 1);
 
+//    //set default psu output as 0
+//    GPIOexGPIOWrite(SW_EN1_EXID, SW_EN1, 0);
+//    GPIOexGPIOWrite(SW_EN2_EXID, SW_EN2, 0);
+//    GPIOexGPIOWrite(SW_EN3_EXID, SW_EN3, 0);
+//    GPIOexGPIOWrite(SW_EN4_EXID, SW_EN4, 0);
+//    GPIOexGPIOWrite(SW_EN5_EXID, SW_EN5, 0);
+//    GPIOexGPIOWrite(SW_EN6_EXID, SW_EN6, 0);
+
+
     //define front panel exp as outputs
     GPIOexPinMode(FP_EXP1_EXID, FP_EXP1, OUTPUT);
     GPIOexPinMode(FP_EXP2_EXID, FP_EXP2, OUTPUT);

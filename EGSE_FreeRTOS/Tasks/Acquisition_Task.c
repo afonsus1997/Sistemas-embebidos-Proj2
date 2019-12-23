@@ -27,15 +27,17 @@ uint8_t ADCvMap[6] = {ADC_V1_VAL, ADC_V2_VAL, ADC_V3_VAL, ADC_V4_VAL, ADC_V5_VAL
 void ConvertValues(){
     int i;
     for(i=0; i<26; i++){
-        LastReadings.ADCs[i] = ((float)RawReadings.ADCs[i] * conversionMap[i])/100;
+        LastReadings.ADCs[i] = ((RawReadings.ADCs[i] / conversionMap[i]));
     }
 }
 
 
 void Railmonitor(){
+    ETPUnion_t * msgtemp;
     uint8_t i;
     for(i=0; i<6; i++){
-        if(PSUstatus[i] == 0 && LastReadings.ADCs[ADCvMap[i]] < ZERO_THRESHOLD);
+        if(PSUstatus[i] == 1 && LastReadings.ADCs[ADCvMap[i]] < ZERO_THRESHOLD)
+            EGSE_sendLog(msgtemp, "Short Circuit!");
     }
 }
 

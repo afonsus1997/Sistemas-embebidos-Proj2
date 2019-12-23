@@ -9,7 +9,7 @@
 //#define ADCSCANTEST
 
 uint8_t adc0PinMap[16] = {BAT_I, BAT_V, EGSE_ADC1, EGSE_ADC2, EGSE_ADC3, EGSE_ADC4, EGSE_ADC5, EGSE_ADC6, EGSE_ADC7, EGSE_ADC8, ADC_V6_VAL, ADC_I6_VAL, ADC_I4_VAL, ADC_V4_VAL, 20, 20};
-uint8_t adc1PinMap[16] = {ADC_V2_VAL, ADC_I2_VAL, ADC_V5_VAL, ADC_V3_VAL, ADC_I3_VAL, ADC_V1_VAL, ADC_I1_VAL, 20, 20, 20, EXP_ADC1_VAL, EXP_ADC2_VAL, EXP_ADC3_VAL, EXP_ADC4_VAL, 20, 20};
+uint8_t adc1PinMap[16] = {ADC_V2_VAL, ADC_I2_VAL, ADC_V5_VAL, ADC_I5_VAL, ADC_V3_VAL, ADC_I3_VAL, ADC_V1_VAL, ADC_I1_VAL, 20, 20, 20, EXP_ADC1_VAL, EXP_ADC2_VAL, EXP_ADC3_VAL, EXP_ADC4_VAL, 20};
 
 
 
@@ -120,7 +120,7 @@ void ADCreadFIFO(){
         if(adc0PinMap[i] != 20){ //sets the read value range
             data = SPIrxbuf1 << 8;
             data |= SPIrxbuf2;
-            RawReadings.ADCs[adc0PinMap[i]] = data;
+            RawReadings.ADCs[adc0PinMap[i]] = (float)data;
         }
 //        data = SPIrxbuf1 << 8;
 //        data |= SPIrxbuf2;
@@ -169,7 +169,7 @@ void ADCreadFIFO(){
         if(adc1PinMap[i] != 20){
             data = SPIrxbuf1 << 8;
             data |= SPIrxbuf2;
-            RawReadings.ADCs[adc1PinMap[i]] = data;
+            RawReadings.ADCs[adc1PinMap[i]] = (float)data;
         }
 //        data = SPIrxbuf1 << 8;
 //        data |= SPIrxbuf2;
